@@ -1,0 +1,41 @@
+﻿<style>
+    #top-paper {
+    position: relative;
+    min-height: 350px;
+    width: 100%;
+    aspect-ratio: 4/1;
+    border-radius: 0;
+    padding-top: 100px;
+    padding-left: 30px;
+    margin-bottom: 30px;
+    background-image: url("https://the-algorithms.com/background1.svg");
+}
+
+.search {
+    width: 280px;
+}
+
+.layout {
+    min-height: 100vh;
+    width: 100%
+}
+
+.top-paper-content {
+    background: linear-gradient(to bottom,rgba(32, 40, 45, 1),rgba(32,40,45,0.3));
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    padding-top: 100px;
+    padding-left: 50px;
+}
+
+</style>
+<MudPaper id="top-paper">
+    <MudPaper Class="top-paper-content">
+        <MudText Typo="Typo.h3" Class="flex-auto">兰亭</MudText><br/>
+        <MudText Typo="Typo.h5"  Class="flex-auto">或取诸怀抱，悟言一室之内；或因寄所托，放浪形骸之外。</MudText><br/><br/>
+        <MudTextField Class="search" T="string"  Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Default" />
+    </MudPaper>
+</MudPaper>

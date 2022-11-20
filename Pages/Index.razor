@@ -1,0 +1,22 @@
+﻿@page "/"
+<PageTitle>Lantin | 回响</PageTitle>
+
+@for (int i = 0; i < 5; i++)
+{
+        <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
+            <MudCardContent>
+                <MudLink Href="@($"/article/1")" Color="Color.Surface">
+                    <MudText Typo="Typo.h5" Style="cursor:pointer">标题</MudText>
+                </MudLink><br/>
+                <MudText Typo="Typo.body2">内容</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudLink Href="@($"/article/1")"  Color="Color.Surface">
+                    <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
+                </MudLink>
+                <MudSpacer></MudSpacer>
+                <MudChip Variant="Variant.Text" Color="Color.Secondary">2022年11月20日</MudChip>
+                </MudCardActions>
+            </MudCard>
+}
+<MudPagination Rectangular="true" Variant="Variant.Filled" Count="30"/>

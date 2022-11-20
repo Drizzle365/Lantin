@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+<MudThemeProvider Theme="_defaultTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudAppBar Color="Color.Primary"  Fixed="true" Elevation="0">
+    <NavMenu></NavMenu>
+</MudAppBar>
+<MudLayout Class="layout">
+    @if (NavigationManager.Uri == NavigationManager.BaseUri)
+    {
+        <TopCard></TopCard>
+    }
+    <MudContainer Style="margin-top:100px">
+        @Body
+    </MudContainer>
+    <MudPaper Style="text-align:center;padding:10px;border-radius:0;margin-top:20px">🏮 <MudLink Color="Color.Secondary" Href="https://github.com/Drizzle365/Lantern" Target="_blank">Lantern</MudLink></MudPaper>
+</MudLayout>
+
+@code {
+    readonly MudTheme _defaultTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#20282d",
+            Secondary = "#00bcb4",
+            TextPrimary = "#fff",
+            TextSecondary = "#fff",
+            Background = "#000",
+            Surface = "#20282d"
+        },
+    };
+}

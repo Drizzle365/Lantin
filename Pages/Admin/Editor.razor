@@ -1,0 +1,26 @@
+﻿@page "/Admin/Editor"
+@inject IJSRuntime JS
+<PageTitle>后台</PageTitle>
+<style>
+    [role=textbox]{
+        height:500px;
+        color:black
+    }
+</style>
+    <div id="edit">
+    <div id="editor"></div>
+</div>
+<MudPaper Class="pa-4 mt-3">
+    <MudButton Color="Color.Secondary" Variant="Variant.Outlined">发布</MudButton>
+</MudPaper>
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("InitEditor");
+        }
+    }
+
+}
