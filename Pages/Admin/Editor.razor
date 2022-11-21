@@ -4,14 +4,17 @@
 <style>
     [role=textbox]{
         height:500px;
-        color:black
     }
 </style>
-    <div id="edit">
+    <MudItem Class="mb-3">
+    <MudTextField T="string" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
+</MudItem>
+<div id="edit">
     <div id="editor"></div>
 </div>
 <MudPaper Class="pa-4 mt-3">
-    <MudButton Color="Color.Secondary" Variant="Variant.Outlined">发布</MudButton>
+    <MudButton Color="Color.Secondary" Variant="Variant.Filled">保存草稿</MudButton>
+    <MudButton Color="Color.Success" Variant="Variant.Filled">立即发布</MudButton>
 </MudPaper>
 @code {
 

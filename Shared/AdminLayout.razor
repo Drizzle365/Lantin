@@ -1,13 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="_defaultTheme" />
+<MudThemeProvider  />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudPaper MinHeight="500px">
     <MudDrawerContainer>
-        <MudDrawer Open="true" Elevation="0" Variant="@DrawerVariant.Persistent" Color="Color.Primary">
+        <MudDrawer Style="border-radius:0 15px 15px 0" Open="true" Elevation="0" Variant="@DrawerVariant.Persistent" Color="Color.Primary">
             <MudDrawerHeader>
                 <MudText Typo="Typo.h6">🏮Lantin 后台</MudText>
             </MudDrawerHeader>
@@ -16,7 +16,7 @@
                 <MudNavLink  Href="/admin/editor" Match="NavLinkMatch.All" Icon="@Icons.Filled.LocalLibrary" IconColor="Color.Inherit">新建</MudNavLink>
             </MudNavMenu>
         </MudDrawer>
-        <div style="background-color:black;min-height:100vh" class="pa-3">
+        <div style="min-height:100vh" class="pa-3">
                 @Body
         </div>
     </MudDrawerContainer>
