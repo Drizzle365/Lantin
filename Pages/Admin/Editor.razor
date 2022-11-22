@@ -1,12 +1,12 @@
 ﻿@page "/Admin/Editor"
-@inject IJSRuntime JS
+@inject IJSRuntime Js
 <PageTitle>后台</PageTitle>
 <style>
     [role=textbox]{
         height:500px;
     }
 </style>
-    <MudItem Class="mb-3">
+<MudItem Class="mb-3">
     <MudTextField T="string" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
 </MudItem>
 <div id="edit">
@@ -16,13 +16,14 @@
     <MudButton Color="Color.Secondary" Variant="Variant.Filled">保存草稿</MudButton>
     <MudButton Color="Color.Success" Variant="Variant.Filled">立即发布</MudButton>
 </MudPaper>
+
 @code {
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("InitEditor");
+            await Js.InvokeVoidAsync("InitEditor");
         }
     }
 
