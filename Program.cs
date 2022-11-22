@@ -13,7 +13,6 @@ Func<IServiceProvider, IFreeSql> freeSqlFactory = _ =>
             $"Initial Catalog={builder.Configuration.GetSection("MySql:DBName").Value};" +
             $"Charset=utf8; SslMode=none;Min pool size=1")
         .UseMonitorCommand(cmd => Console.WriteLine($"Sql：{cmd.CommandText}")) //监听SQL语句
-        .UseAutoSyncStructure(true) //自动同步实体结构到数据库，FreeSql不会扫描程序集，只有CRUD时才会生成表。
         .Build();
     return freeSql;
 };
@@ -26,9 +25,11 @@ var app = builder.Build();
 
 using (IServiceScope serviceScope = app.Services.CreateScope())
 {
-    var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
-    freeSql.CodeFirst.SyncStructure(typeof(Article));
-    freeSql.CodeFirst.SyncStructure(typeof(Comment));
+    // var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
+    // freeSql.CodeFirst.SyncStructure(typeof(Article));
+    // freeSql.CodeFirst.SyncStructure(typeof(Comment));
+    // freeSql.CodeFirst.SyncStructure(typeof(User));
+
 }
 
 if (!app.Environment.IsDevelopment())
