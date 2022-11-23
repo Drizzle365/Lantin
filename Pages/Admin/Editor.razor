@@ -1,5 +1,4 @@
 ﻿@page "/Admin/Editor"
-@inject Service.Article ArticleService
 @inject IJSRuntime Js
 <PageTitle>后台</PageTitle>
 <style>
@@ -19,7 +18,6 @@
 </MudPaper>
 
 @code {
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
