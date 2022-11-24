@@ -7,9 +7,16 @@
         height:500px;
     }
 </style>
-<MudItem Class="mb-3">
-    <MudTextField @bind-Value="_title" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
-</MudItem>
+<div class="mb-3 d-flex flex-grow-1 gap-2">
+    <MudPaper Width="200px" Elevation="0">
+        <MudSelect T="string" Label="分类" Variant="Variant.Outlined">
+            <MudSelectItem Value="@("默认")"/>
+        </MudSelect>
+    </MudPaper>
+    <MudPaper Class="flex-grow-1" Elevation="0">
+        <MudTextField @bind-Value="_title" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
+    </MudPaper>
+</div>
 <div id="edit">
     <div id="editor"></div>
 </div>
