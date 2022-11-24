@@ -1,5 +1,6 @@
 ﻿@page "/Admin/Editor"
 @inject IJSRuntime Js
+@inject IFreeSql Db
 <PageTitle>后台</PageTitle>
 <style>
     [role=textbox]{
@@ -7,23 +8,41 @@
     }
 </style>
 <MudItem Class="mb-3">
-    <MudTextField T="string" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
+    <MudTextField @bind-Value="_title" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
 </MudItem>
 <div id="edit">
     <div id="editor"></div>
 </div>
 <MudPaper Class="pa-4 mt-3">
     <MudButton Color="Color.Secondary" Variant="Variant.Filled">保存草稿</MudButton>
-    <MudButton Color="Color.Success" Variant="Variant.Filled">立即发布</MudButton>
+    <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Post">立即发布</MudButton>
 </MudPaper>
 
 @code {
+    string? _title;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await Js.InvokeVoidAsync("InitEditor");
         }
+    }
+
+    async Task<string> GetEditorData()
+    {
+        return await Js.InvokeAsync<string>("GetEditorData");
+    }
+
+    async Task Post()
+    {
+        await Db.Insert(new Model.Article
+        {
+            Content = await GetEditorData(),
+            Datetime = DateTime.Now,
+            Title = _title
+        })
+            .ExecuteIdentityAsync();
     }
 
 }
