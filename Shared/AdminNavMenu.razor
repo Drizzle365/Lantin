@@ -1,0 +1,16 @@
+﻿<style>
+    a{
+        color:white
+    }
+</style>
+<MudDrawer Style="border-radius:0 15px 15px 0" Open="true" Elevation="0" Variant="@DrawerVariant.Persistent" Color="Color.Primary">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">🏮Lantin 后台</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/admin" Match="NavLinkMatch.All" >面板</MudNavLink>
+        <MudNavGroup Title="文章" >
+            <MudNavLink Href="/admin/editor">发布</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudDrawer>
