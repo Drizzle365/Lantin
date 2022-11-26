@@ -3,7 +3,11 @@
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-
+<style>
+    .mud-nav-link-text{
+        color:black
+    }
+</style>
 <MudLayout Style="background-color:aliceblue;min-height:100vh">
 <MudPaper Elevation="0">
 <MudDrawer Height="100vh" @bind-Open="@open"  Elevation="0" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
@@ -12,14 +16,7 @@
 </MudPaper>
 <MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px"> 
     <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
-        <MudToolBar>
-        <MudButton >🏮Lantin</MudButton>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Outlined.Edit" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings"  />
-        <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
-    </MudToolBar>
+        <ToolBar></ToolBar>
     </MudPaper>
 </MudPaper>
 <MudPaper Elevation="0" Style="background-color:aliceblue;padding-left:80px;padding-right:30px">
