@@ -4,26 +4,30 @@
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-<MudLayout>
-    <MudPaper MinHeight="500px">
-        <AdminNavMenu></AdminNavMenu>
-        <div style="min-height:100vh;background-color:rgb(240 243 250)" class="pa-3">
-            @Body
-        </div>
+<MudLayout Style="background-color:aliceblue;min-height:100vh">
+<MudPaper Elevation="0">
+<MudDrawer Height="100vh" @bind-Open="@open"  Elevation="0" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+            <AdminNavMenu></AdminNavMenu>
+</MudDrawer>
+</MudPaper>
+<MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px"> 
+    <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
+        <MudToolBar>
+        <MudButton >🏮Lantin</MudButton>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Settings"  />
+        <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
+    </MudToolBar>
     </MudPaper>
+</MudPaper>
+<MudPaper Elevation="0" Style="background-color:aliceblue;padding-left:80px;padding-right:30px">
+        @Body
+</MudPaper>    
 </MudLayout>
 
-@code{
-    readonly MudTheme _defaultTheme = new MudTheme()
-    {
-        Palette = new Palette()
-        {
-            Primary = "#20282d",
-            Secondary = "#00bcb4",
-            TextPrimary = "#fff",
-            TextSecondary = "#fff",
-            Background = "#000",
-            Surface = "#20282d",
-        },
-    };
+@code
+{ 
+    bool open = false;
 }

@@ -2,39 +2,12 @@
 @inject IJSRuntime Js
 @inject IFreeSql Db
 <PageTitle>后台</PageTitle>
-<style>
-    [role=textbox]{
-        height:500px;
-    }
-</style>
-<div class="mb-3 d-flex flex-grow-1 gap-2">
-    <MudPaper Width="200px" Elevation="0">
-        <MudSelect T="string" Label="分类" Variant="Variant.Outlined">
-            <MudSelectItem Value="@("默认")"/>
-        </MudSelect>
-    </MudPaper>
-    <MudPaper Class="flex-grow-1" Elevation="0">
-        <MudTextField @bind-Value="_title" Variant="Variant.Outlined" Placeholder="标题"></MudTextField>
-    </MudPaper>
-</div>
+
+
 <div id="edit">
     <div id="editor"></div>
 </div>
 
-<MudPaper Elevation="25" Class="mt-3">
-    <MudToolBar>
-        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-5" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Add" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Edit" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Remove" Color="Color.Inherit" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" />
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
-        <MudIconButton Icon="@Icons.Material.Outlined.PushPin" />
-        <MudIconButton Icon="@Icons.Material.Outlined.PeopleAlt" />
-        <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
-    </MudToolBar>
-</MudPaper>
 @code {
     string? _title;
 
