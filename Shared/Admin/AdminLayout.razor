@@ -1,30 +1,31 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 <style>
-    .mud-nav-link-text{
+    .mud-drawer-content .mud-nav-link-text{
         color:black
     }
 </style>
-<MudLayout Style="background-color:aliceblue;min-height:100vh">
-<MudPaper Elevation="0">
-<MudDrawer Height="100vh" @bind-Open="@open"  Elevation="0" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+<MudLayout Style="background-color:rgb(240,243,250);min-height:100vh">
+        <MudPaper Elevation="0">
+        <MudDrawer Height="100vh" @bind-Open="@open" Elevation="0" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
             <AdminNavMenu></AdminNavMenu>
-</MudDrawer>
-</MudPaper>
-<MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px"> 
-    <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
-        <ToolBar></ToolBar>
+        </MudDrawer>
     </MudPaper>
-</MudPaper>
-<MudPaper Elevation="0" Style="background-color:aliceblue;padding-left:80px;padding-right:30px">
+    <MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px">
+        <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
+            <ToolBar />
+        </MudPaper>
+    </MudPaper>
+    <MudPaper Elevation="0" Style="background-color:rgb(240,243,250);padding-left:80px;padding-right:30px">
         @Body
-</MudPaper>    
+    </MudPaper>
 </MudLayout>
 
 @code
-{ 
+{
     bool open = false;
 }
