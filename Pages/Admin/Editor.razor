@@ -3,7 +3,11 @@
 @inject IJSRuntime Js
 @inject IFreeSql Db
 <PageTitle>后台</PageTitle>
-
+<style>
+    #editor{
+        min-height:300px
+    }
+</style>
 
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
         <MudToolBar>
@@ -20,6 +24,10 @@
     <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.LibraryMusic"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
+    <MudChipSet @bind-SelectedChip="selected" Filter="true" Style="display:inline-block">
+    <MudChip Color="Color.Success" Default="true">公开</MudChip>
+    <MudChip Color="Color.Warning">私密</MudChip>
+    </MudChipSet>
 </MudPaper>
 <MudPaper Elevation="3" Class="pa-3 rounded-0" >
     <div id="editor"></div>
@@ -27,6 +35,7 @@
 
 @code {
     string? _title;
+    MudChip selected;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
