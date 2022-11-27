@@ -11,7 +11,7 @@
 </style>
 <MudLayout Style="background-color:rgb(240,243,250);min-height:100vh">
         <MudPaper Elevation="0">
-        <MudDrawer Height="100vh" @bind-Open="@open" Elevation="0" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+        <MudDrawer Height="100vh"  Elevation="0" Variant="@DrawerVariant.Mini" >
             <AdminNavMenu></AdminNavMenu>
         </MudDrawer>
     </MudPaper>
@@ -25,7 +25,3 @@
     </MudPaper>
 </MudLayout>
 
-@code
-{
-    bool open = false;
-}

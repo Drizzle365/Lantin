@@ -1,13 +1,15 @@
 ﻿// noinspection JSUnresolvedVariable
 
 function InitEditor() {
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(r => {
-            window.editor = r
+    
+    BalloonEditor
+        .create(document.querySelector('#editor'), {
         })
-        .catch(error => {
-            console.error(error);
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
         });
 }
 

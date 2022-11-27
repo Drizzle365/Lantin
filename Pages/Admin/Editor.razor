@@ -1,24 +1,27 @@
 ﻿@page "/Admin/Editor"
+@inject ISnackbar Snackbar
 @inject IJSRuntime Js
 @inject IFreeSql Db
 <PageTitle>后台</PageTitle>
 
-<style>
-[aria-label=编辑器编辑区域：main]{
-    min-height:300px;
-}
-</style>
+
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
         <MudToolBar>
             <MudTextField @bind-Value="_title" Placeholder="标题"></MudTextField>
             <MudSpacer />
-            <MudButtonGroup Variant="Variant.Outlined">
+            <MudButtonGroup Variant="Variant.Outlined" Class="mt-5"> 
                 <MudButton>草稿</MudButton>
-                <MudButton OnClick="Post">发布</MudButton>
+                <MudButton OnClick="Post" >发布</MudButton>
             </MudButtonGroup>
         </MudToolBar>
 </MudPaper>
-<MudPaper Elevation="0">
+<MudPaper Elevation="0" Class="rounded-0 pa-3">
+    <MudIconButton Icon="@Icons.Filled.Image" aria-label="delete"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.LibraryMusic"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
+</MudPaper>
+<MudPaper Elevation="3" Class="pa-3 rounded-0" >
     <div id="editor"></div>
 </MudPaper>
 
@@ -46,6 +49,6 @@
             Title = _title
         })
             .ExecuteIdentityAsync();
+        Snackbar.Add("发布成功！");
     }
-
 }
