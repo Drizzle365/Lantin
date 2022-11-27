@@ -1,66 +1,69 @@
 ﻿@page "/article/{Id:int}"
 <PageTitle>文章 | Lantin</PageTitle>
-<MudPaper Class="pa-8 pb-14">
-    <MudText Typo="Typo.h3" Class="mb-5">标题</MudText>
-    <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-    <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">250 字</MudChip>
-    <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
-        @($"2022年11月20日")
-    </MudChip>
-    <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
-        @($"8:56")
-    </MudChip>
-    <br/><br/>
-    <MudText Typo="Typo.body1" Class="pb-8">
-        你好呀
-    </MudText>
-    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left">上一篇：李白</MudButton>
-    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right">下一篇：杜甫</MudButton>
-</MudPaper><br/><br/>
-<MudPaper Class="pa-4">
-    @for (int i = 0; i < 3; i++)
-    {
-        <MudCard Class="mb-5">
-            <MudCardHeader>
-                <CardHeaderAvatar>
-                    <MudAvatar Color="Color.Secondary">D</MudAvatar>
-                </CardHeaderAvatar>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.body1">Drizzle</MudText>
-                    <MudText Typo="Typo.body2" Color="Color.Secondary">2022-11-17 19:45</MudText>
-                </CardHeaderContent>
-                <CardHeaderActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
-                </CardHeaderActions>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudText Typo="Typo.body2">
-                    自古以来每逢秋天都会感到悲凉寂寥，我却认为秋天要胜过春天。万里晴空，一只鹤凌云而飞起，就引发我的诗兴到了蓝天上了。
+<MudContainer Style="margin-top:100px">
+
+    <MudPaper Class="pa-8 pb-14">
+        <MudText Typo="Typo.h3" Class="mb-5">标题</MudText>
+        <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
+        <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">250 字</MudChip>
+        <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
+            @($"2022年11月20日")
+        </MudChip>
+        <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
+            @($"8:56")
+        </MudChip>
+        <br/><br/>
+        <MudText Typo="Typo.body1" Class="pb-8">
+            你好呀
+        </MudText>
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left">上一篇：李白</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right">下一篇：杜甫</MudButton>
+    </MudPaper><br/><br/>
+    <MudPaper Class="pa-4">
+        @for (int i = 0; i < 3; i++)
+        {
+            <MudCard Class="mb-5">
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudAvatar Color="Color.Secondary">D</MudAvatar>
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">Drizzle</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">2022-11-17 19:45</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">
+                        自古以来每逢秋天都会感到悲凉寂寥，我却认为秋天要胜过春天。万里晴空，一只鹤凌云而飞起，就引发我的诗兴到了蓝天上了。
                     </MudText>
-            </MudCardContent>
-        </MudCard>
-    }
-</MudPaper><br/><br/>
-<MudPaper Class="pa-8">
-    <MudText Typo="Typo.h4">评论</MudText>
-    <MudGrid Class="pt-5">
-        <MudItem xs="12">
-            <MudTextField T="string" Label="邮箱" Variant="Variant.Filled"/>
-        </MudItem>
-        <MudItem xs="12">
-            <MudTextField T="string" Label="昵称" Variant="Variant.Filled"/>
-        </MudItem>
-        <MudItem xs="12">
-            <MudTextField T="string" Label="网址" Variant="Variant.Filled"/>
-        </MudItem>
-        <MudItem xs="12">
-            <MudTextField Placeholder="在这里输入您的评论内容" T="string" Variant="Variant.Filled" Lines="5"/>
-        </MudItem>
-        <MudItem xs="5">
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
-        </MudItem>
-    </MudGrid>
-</MudPaper><br/><br/>
+                </MudCardContent>
+            </MudCard>
+        }
+    </MudPaper><br/><br/>
+    <MudPaper Class="pa-8">
+        <MudText Typo="Typo.h4">评论</MudText>
+        <MudGrid Class="pt-5">
+            <MudItem xs="12">
+                <MudTextField T="string" Label="邮箱" Variant="Variant.Filled"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField T="string" Label="昵称" Variant="Variant.Filled"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField T="string" Label="网址" Variant="Variant.Filled"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Placeholder="在这里输入您的评论内容" T="string" Variant="Variant.Filled" Lines="5"/>
+            </MudItem>
+            <MudItem xs="5">
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudPaper><br/><br/>
+</MudContainer>
 
 @code {
 

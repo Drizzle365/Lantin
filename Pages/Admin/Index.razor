@@ -9,74 +9,63 @@
     }
 </style>
 <MudContainer>
-    <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
-    <MudCarouselItem Transition="Transition.Fade" Color="@Color.Primary">
-        <div class="d-flex" style="height:100%">
-            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-        </div>
-    </MudCarouselItem>
-    <MudCarouselItem Transition="Transition.Fade" Color="@Color.Secondary">
-        <div class="d-flex" style="height:100%">
-            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-        </div>
-    </MudCarouselItem>
-</MudCarousel>
-   
-<MudGrid Class="mt-5">
-
-     <MudItem xs="12" sm="6" md="4" lg="3">
-        <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
-        <MudText Typo="Typo.body2" Style="color:#A3AED0">
-            访问
-        </MudText>
-        <MudIcon Class="icon-card" Icon="@Icons.Custom.Uncategorized.Radioactive" />
-        <MudText Typo="Typo.h3" Class="mt-7">
-            12K
-        </MudText>
-    </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" sm="6" md="4" lg="3">
-        <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
-        <MudText Typo="Typo.body2" Style="color:#A3AED0">
-            文章
-        </MudText>
-        <MudIcon Class="icon-card" Icon="@Icons.Filled.Article" />
-        <MudText Typo="Typo.h3" Class="mt-7">
-            321
-        </MudText>
-    </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4" lg="3">
-        <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
-        <MudText Typo="Typo.body2" Style="color:#A3AED0">
-            评论
-        </MudText>
-        <MudIcon Class="icon-card" Icon="@Icons.Filled.Comment" />
-        <MudText Typo="Typo.h3" Class="mt-7">
-            512
-        </MudText>
-    </MudPaper>
-    </MudItem>
+    <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+        <MudCarouselItem Transition="Transition.Fade" Color="@Color.Primary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+            </div>
+        </MudCarouselItem>
+        <MudCarouselItem Transition="Transition.Fade" Color="@Color.Secondary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large"/>
+            </div>
+        </MudCarouselItem>
+    </MudCarousel>
+    <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
         <MudItem xs="12" sm="6" md="4" lg="3">
-        <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
-        <MudText Typo="Typo.body2" Style="color:#A3AED0">
-            附件
-        </MudText>
-        <MudIcon Class="icon-card" Icon="@Icons.Filled.FilePresent" />
-        <MudText Typo="Typo.h3" Class="mt-7">
-            24M
-        </MudText>
-    </MudPaper>
-    </MudItem>
-</MudGrid>
-    
-        
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+                <MudText Typo="Typo.body2" Style="color:#A3AED0">
+                    访问
+                </MudText>
+                <MudIcon Class="icon-card" Icon="@Icons.Custom.Uncategorized.Radioactive"/>
+                <MudText Typo="Typo.h3" Class="mt-7">
+                    12K
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+                <MudText Typo="Typo.body2" Style="color:#A3AED0">
+                    文章
+                </MudText>
+                <MudIcon Class="icon-card" Icon="@Icons.Filled.Article"/>
+                <MudText Typo="Typo.h3" Class="mt-7">
+                    321
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+                <MudText Typo="Typo.body2" Style="color:#A3AED0">
+                    评论
+                </MudText>
+                <MudIcon Class="icon-card" Icon="@Icons.Filled.Comment"/>
+                <MudText Typo="Typo.h3" Class="mt-7">
+                    512
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+                <MudText Typo="Typo.body2" Style="color:#A3AED0">
+                    附件
+                </MudText>
+                <MudIcon Class="icon-card" Icon="@Icons.Filled.FilePresent"/>
+                <MudText Typo="Typo.h3" Class="mt-7">
+                    24M
+                </MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 </MudContainer>
-@code { 
-    private bool arrows = true;
-    private bool bullets = true;
-    private bool enableSwipeGesture = true;
-    private bool autocycle = true;
-    private Transition transition = Transition.Slide;
-}

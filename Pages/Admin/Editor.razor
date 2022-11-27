@@ -10,32 +10,33 @@
 </style>
 
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
-        <MudToolBar>
-            <MudTextField @bind-Value="_title" Placeholder="标题"></MudTextField>
-            <MudSpacer />
-            <MudButtonGroup Variant="Variant.Outlined" Class="mt-5"> 
-                <MudButton>草稿</MudButton>
-                <MudButton OnClick="Post" >发布</MudButton>
-            </MudButtonGroup>
-        </MudToolBar>
+    <MudToolBar>
+        <MudTextField @bind-Value="_title" Placeholder="标题"></MudTextField>
+        <MudSpacer/>
+        <MudButtonGroup Variant="Variant.Outlined" Class="mt-5">
+            <MudButton>草稿</MudButton>
+            <MudButton OnClick="Post">发布</MudButton>
+        </MudButtonGroup>
+    </MudToolBar>
 </MudPaper>
 <MudPaper Elevation="0" Class="rounded-0 pa-3">
     <MudIconButton Icon="@Icons.Filled.Image" aria-label="delete"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.LibraryMusic"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
-    <MudChipSet @bind-SelectedChip="selected" Filter="true" Style="display:inline-block">
-    <MudChip Color="Color.Success" Default="true">公开</MudChip>
-    <MudChip Color="Color.Warning">私密</MudChip>
+    <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
+        <MudChip Color="Color.Success" Default="true">公开</MudChip>
+        <MudChip Color="Color.Warning">私密</MudChip>
     </MudChipSet>
 </MudPaper>
-<MudPaper Elevation="3" Class="pa-3 rounded-0" >
+<MudPaper Elevation="3" Class="pa-3 rounded-0">
     <div id="editor"></div>
 </MudPaper>
 
 @code {
     string? _title;
-    MudChip selected;
+    MudChip? _selected;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -60,4 +61,5 @@
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");
     }
+
 }

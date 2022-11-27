@@ -1,22 +1,75 @@
-﻿@page "/"
+﻿@page "/{page:int?}"
+@using System.Text.RegularExpressions;
+@inject IFreeSql Db
+@inject NavigationManager NavigationManager
 <PageTitle>Lantin | 回响</PageTitle>
+<TopCard></TopCard>
 
-@for (int i = 0; i < 5; i++)
-{
+<MudContainer Style="margin-top:100px">
+
+    @foreach (var item in _articles)
+    {
         <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
             <MudCardContent>
                 <MudLink Href="@($"/article/1")" Color="Color.Surface">
-                    <MudText Typo="Typo.h5" Style="cursor:pointer">标题</MudText>
+                    <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
                 </MudLink><br/>
-                <MudText Typo="Typo.body2">内容</MudText>
+                <MudText Typo="Typo.body2">
+                    @ReContent(item.Content)
+                </MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudLink Href="@($"/article/1")"  Color="Color.Surface">
+                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
                     <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
                 </MudLink>
                 <MudSpacer></MudSpacer>
-                <MudChip Variant="Variant.Text" Color="Color.Secondary">2022年11月20日</MudChip>
-                </MudCardActions>
-            </MudCard>
+                <MudChip Variant="Variant.Text" Color="Color.Secondary">
+                    @($"{item.Datetime.Year}年{item.Datetime.Month}月{item.Datetime.Day}日")
+                </MudChip>
+            </MudCardActions>
+        </MudCard>
+    }
+    <MudPagination SelectedChanged="PageChanged" Rectangular="true" Variant="Variant.Filled" Count="@((int)(_articleCount / 5))"/>
+</MudContainer>
+
+@code{
+    long _articleCount;
+
+    [Parameter]
+    public int Page { get; set; }
+
+    List<Model.Article> _articles = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _articleCount = await Db.Select<Model.Article>().CountAsync();
+        if (Page <= 1)
+            await GetPage();
+        else
+            await GetPage(Page);
+    }
+
+    async void PageChanged(int i)
+    {
+        await GetPage(i);
+
+        NavigationManager.NavigateTo($"/{i}");
+    }
+
+    async Task GetPage(int page = 1, int size = 5)
+    {
+        _articles = await Db.Select<Model.Article>()
+            .Offset((page - 1) * size)
+            .Limit(size)
+            .OrderBy("ArticleId DESC")
+            .ToListAsync();
+    }
+
+    string ReContent(string s = "")
+    {
+        Regex reg = new("<[^>]+>");
+        var temp = reg.Replace(s, "");
+        return temp.Replace("&nbsp;", " ");
+    }
+
 }
-<MudPagination Rectangular="true" Variant="Variant.Filled" Count="30"/>
