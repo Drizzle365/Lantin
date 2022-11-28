@@ -9,7 +9,6 @@
         color:rgb(156 150 204)
     }
 </style>
-<MudContainer>
     <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
         <MudCarouselItem Transition="Transition.Fade" Color="@Color.Primary">
             <div class="d-flex" style="height:100%">
@@ -22,9 +21,10 @@
             </div>
         </MudCarouselItem>
     </MudCarousel>
-    <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
-        <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+<MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
+    <MudItem xs="12" sm="6" md="4" lg="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2" Style="background-color:#f0f3fa" Elevation="0">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl" Height="160px" Width="100%" Elevation="0">
                 <MudText Typo="Typo.body2" Style="color:#A3AED0">
                     版本
                 </MudText>
@@ -33,10 +33,11 @@
                     1.0
                 </MudText>
             </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4" lg="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2" Style="background-color:#f0f3fa" Elevation="0">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl" Height="160px" Width="100%" Elevation="0">
                 <MudText Typo="Typo.body2" Style="color:#A3AED0">
                     文章
                 </MudText>
@@ -45,10 +46,12 @@
                     @articleCount
                 </MudText>
             </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
-                <MudText Typo="Typo.body2" Style="color:#A3AED0">
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4" lg="3">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2" Style="background-color:#f0f3fa" Elevation="0">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl" Height="160px" Width="100%" Elevation="0">
+               <MudText Typo="Typo.body2" Style="color:#A3AED0">
                     评论
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Filled.Comment"/>
@@ -56,9 +59,11 @@
                     @commentCount
                 </MudText>
             </MudPaper>
-        </MudItem>
+        </MudPaper>
+    </MudItem>
         <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2" Style="background-color:#f0f3fa" Elevation="0">
+            <MudPaper Style="position:relative" Class="pa-5 rounded-xl" Height="160px" Width="100%" Elevation="0">
                 <MudText Typo="Typo.body2" Style="color:#A3AED0">
                     附件
                 </MudText>
@@ -67,9 +72,9 @@
                     24M
                 </MudText>
             </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 @code{
     long articleCount;
     long commentCount;
