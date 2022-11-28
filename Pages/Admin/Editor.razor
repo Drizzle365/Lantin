@@ -52,9 +52,15 @@
 
     async Task Post()
     {
+        var content = await GetEditorData();
+        if (_title == null || content == null)
+        {
+            Snackbar.Add("请输入标题和内容再发布");
+            return;
+        }
         await Db.Insert(new Model.Article
         {
-            Content = await GetEditorData(),
+            Content = content,
             Datetime = DateTime.Now,
             Title = _title
         })

@@ -1,6 +1,59 @@
 ﻿@page "/admin/article/list"
-    文章列表
+@inject IFreeSql Db
+
+<MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl"  Items="@Elements" Hover="true"  Filter="new Func<Model.Article,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">文章列表</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>标题</MudTh>
+        <MudTh>分类</MudTh>
+        <MudTh>日期</MudTh>
+        <MudTh>可见</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Title">@context.Title</MudTd>
+        <MudTd DataLabel="CategorizeId">@context.CategorizeId</MudTd>
+        <MudTd DataLabel="Datetime">@context.Datetime</MudTd>
+        <MudTd DataLabel="Visibility">@context.Visibility</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private Model.Article selectedItem1 = null;
+    bool loading = true;
+    private HashSet<Model.Article> selectedItems = new HashSet<Model.Article>();
 
+    private IEnumerable<Model.Article> Elements = new List<Model.Article>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Elements = await Db.Select<Model.Article>()
+        .OrderBy("ArticleId DESC")
+        .ToListAsync();
+        loading = false;
+    }
+
+    private bool FilterFunc1(Model.Article element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Model.Article element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Content.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
 }
+
