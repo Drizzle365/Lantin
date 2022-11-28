@@ -1,4 +1,5 @@
 ﻿@page "/admin"
+@inject IFreeSql Db
 <style>
     .icon-card{
         position:absolute;
@@ -25,11 +26,11 @@
         <MudItem xs="12" sm="6" md="4" lg="3">
             <MudPaper Style="position:relative" Class="pa-5 rounded-xl justify-center" Height="160px" Width="250px" Elevation="0">
                 <MudText Typo="Typo.body2" Style="color:#A3AED0">
-                    访问
+                    版本
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Custom.Uncategorized.Radioactive"/>
                 <MudText Typo="Typo.h3" Class="mt-7">
-                    12K
+                    1.0
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -41,7 +42,7 @@
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Filled.Article"/>
                 <MudText Typo="Typo.h3" Class="mt-7">
-                    321
+                    @articleCount
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -52,7 +53,7 @@
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Filled.Comment"/>
                 <MudText Typo="Typo.h3" Class="mt-7">
-                    512
+                    @commentCount
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -69,3 +70,12 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
+@code{
+    long articleCount;
+    long commentCount;
+    protected override void OnInitialized()
+    {
+        articleCount = Db.Select<Model.Article>().Count();
+        commentCount = Db.Select<Model.Comment>().Count();
+    }
+}

@@ -11,7 +11,7 @@
     {
         <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
             <MudCardContent>
-                <MudLink Href="@($"/article/1")" Color="Color.Surface">
+                    <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
                     <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
                 </MudLink><br/>
                 <MudText Typo="Typo.body2">
@@ -52,7 +52,6 @@
     async void PageChanged(int i)
     {
         await GetPage(i);
-
         NavigationManager.NavigateTo($"/{i}");
     }
 
@@ -65,8 +64,10 @@
             .ToListAsync();
     }
 
-    string ReContent(string s = "")
+    string ReContent(string? s)
     {
+        if (s is null)
+            return "";
         Regex reg = new("<[^>]+>");
         var temp = reg.Replace(s, "");
         return temp.Replace("&nbsp;", " ");

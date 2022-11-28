@@ -1,5 +1,6 @@
 ﻿using MudBlazor.Services;
 using MudBlazor;
+using Lantin.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 Func<IServiceProvider, IFreeSql> freeSqlFactory = _ =>

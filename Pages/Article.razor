@@ -1,65 +1,77 @@
 ﻿@page "/article/{Id:int}"
-<PageTitle>文章 | Lantin</PageTitle>
+@inject IFreeSql Db
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+<PageTitle>@article.Title | Lantin</PageTitle>
 <MudContainer Style="margin-top:100px">
-
     <MudPaper Class="pa-8 pb-14">
-        <MudText Typo="Typo.h3" Class="mb-5">标题</MudText>
+        <MudText Typo="Typo.h3" Class="mb-5">@article.Title</MudText>
         <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-        <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">250 字</MudChip>
+        <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(article?.Content?.Length) 字</MudChip>
         <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
-            @($"2022年11月20日")
+            @($"{article.Datetime.Year}年{article.Datetime.Month}月{article.Datetime.Day}日")
         </MudChip>
         <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
-            @($"8:56")
+            @($"{article.Datetime.Hour}:{article.Datetime.Minute}")
         </MudChip>
         <br/><br/>
         <MudText Typo="Typo.body1" Class="pb-8">
-            你好呀
+            @(new MarkupString("" + article.Content))
         </MudText>
-        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left">上一篇：李白</MudButton>
-        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right">下一篇：杜甫</MudButton>
-    </MudPaper><br/><br/>
-    <MudPaper Class="pa-4">
-        @for (int i = 0; i < 3; i++)
+        @if (last is not null)
         {
-            <MudCard Class="mb-5">
-                <MudCardHeader>
-                    <CardHeaderAvatar>
-                        <MudAvatar Color="Color.Secondary">D</MudAvatar>
-                    </CardHeaderAvatar>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.body1">Drizzle</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">2022-11-17 19:45</MudText>
-                    </CardHeaderContent>
-                    <CardHeaderActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
-                    </CardHeaderActions>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudText Typo="Typo.body2">
-                        自古以来每逢秋天都会感到悲凉寂寥，我却认为秋天要胜过春天。万里晴空，一只鹤凌云而飞起，就引发我的诗兴到了蓝天上了。
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@last?.Title</MudButton>
+        }
+        @if (next is not null)
+        {
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right" OnClick="GetNext">下一篇：@next?.Title</MudButton>
         }
     </MudPaper><br/><br/>
+    @if (comments.Count > 0)
+    {
+        <MudPaper Class="pa-4">
+            @foreach(var item in comments)
+            {
+                <MudCard Class="mb-5">
+                    <MudCardHeader>
+                        <CardHeaderAvatar>
+                            <MudAvatar Color="Color.Secondary">@item.Name?.First()</MudAvatar>
+                        </CardHeaderAvatar>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@item.Name</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@item.Datetime</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">
+                            @item.Content
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudPaper><br/><br/>
+    }
+        
     <MudPaper Class="pa-8">
         <MudText Typo="Typo.h4">评论</MudText>
         <MudGrid Class="pt-5">
             <MudItem xs="12">
-                <MudTextField T="string" Label="邮箱" Variant="Variant.Filled"/>
+                <MudTextField @bind-Value="email" Label="邮箱 *" Variant="Variant.Filled"/>
             </MudItem>
             <MudItem xs="12">
-                <MudTextField T="string" Label="昵称" Variant="Variant.Filled"/>
+                <MudTextField @bind-Value="name"  Label="昵称 *" Variant="Variant.Filled"/>
             </MudItem>
             <MudItem xs="12">
-                <MudTextField T="string" Label="网址" Variant="Variant.Filled"/>
+                <MudTextField @bind-Value="url"  Label="网址" Variant="Variant.Filled"/>
             </MudItem>
             <MudItem xs="12">
-                <MudTextField Placeholder="在这里输入您的评论内容" T="string" Variant="Variant.Filled" Lines="5"/>
+                <MudTextField Placeholder="在这里输入您的评论内容 *" @bind-Value="content"  Variant="Variant.Filled" Lines="5"/>
             </MudItem>
             <MudItem xs="5">
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
+                <MudButton OnClick="PostComment" Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
             </MudItem>
         </MudGrid>
     </MudPaper><br/><br/>
@@ -69,6 +81,51 @@
 
     [Parameter]
     public int Id { get; set; }
+    Model.Article article = new();
+    Model.Article? last;
+    Model.Article? next;
+    string? email;
+    string? name;
+    string? url;
+    string? content;
+    List<Model.Comment> comments = new();
+    protected override  void OnInitialized()
+    {
+        article =  Db.Select<Model.Article>().Where(x => x.ArticleId == Id).First();
+        comments = Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToList();
+        last = Db.Select<Model.Article>()
+        .Where(x => x.ArticleId < Id).OrderBy("ArticleId DESC").Limit(1).First();
+        next = Db.Select<Model.Article>()
+        .Where(x => x.ArticleId > Id).Limit(1).First();
+    }
+    void GetLast()
+    {
+        NavigationManager.NavigateTo($"/article/{last?.ArticleId}",true);
+    }
+    void GetNext()
+    {
+        NavigationManager.NavigateTo($"/article/{next?.ArticleId}", true);
+    }
+    async void PostComment()
+    {
+        Console.WriteLine(email?.Trim().Length);
+        if (email is null || name is null || content is null)
+        {
+            Snackbar.Add("请填写完整！");
+            return;
+        }
+        await Db.Insert<Model.Comment>()
+        .AppendData(new Model.Comment
+        {
+            ArticleId = Id,
+            Email = email,
+            Name = name,
+            Url = url,
+            Content=content,
+            Datetime = DateTime.Now
+        })
+        .ExecuteIdentityAsync();
 
+    }
 
 }
