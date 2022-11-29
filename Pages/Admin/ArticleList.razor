@@ -1,6 +1,6 @@
 ﻿@page "/admin/article/list"
 @inject IFreeSql Db
-
+<PageTitle>文章列表 | Lantin</PageTitle>
 <MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl"  Items="@Elements" Hover="true"  Filter="new Func<Model.Article,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">文章列表</MudText>

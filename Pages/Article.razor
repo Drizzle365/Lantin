@@ -38,7 +38,14 @@
                             <MudAvatar Color="Color.Secondary">@item.Name?.First()</MudAvatar>
                         </CardHeaderAvatar>
                         <CardHeaderContent>
-                            <MudText Typo="Typo.body1">@item.Name</MudText>
+                            @if(item.Url is null)
+                            {
+                                <MudText Typo="Typo.body1">@item.Name</MudText>
+                            }
+                            else
+                            {
+                                <NavLink Href="@item.Url" Target="_blank"><MudText Typo="Typo.body1">@item.Name</MudText></NavLink>
+                            }
                             <MudText Typo="Typo.body2" Color="Color.Secondary">@item.Datetime</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
@@ -125,7 +132,10 @@
             Datetime = DateTime.Now
         })
         .ExecuteIdentityAsync();
-
+        content = null;
+        comments = await Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToListAsync();
+        StateHasChanged();
+        Snackbar.Add("回复成功~");
     }
 
 }
