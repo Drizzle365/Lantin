@@ -1,10 +1,11 @@
 ﻿@page "/admin/comment/list"
 @inject IFreeSql Db
-<MudDataGrid Loading="loading" T="Model.Comment" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+@inject ISnackbar Snackbar
+<MudDataGrid Loading="loading" SelectedItemsChanged="SelectedItemsChanged" T="Model.Comment" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
     Hideable="true">
     <ToolBarContent>
         <MudButtonGroup Variant="Variant.Outlined">
-            <MudButton>删除</MudButton>
+            <MudButton OnClick="Delete">删除</MudButton>
         </MudButtonGroup>
         <MudSpacer />
         <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
@@ -27,8 +28,7 @@
     bool loading = true;
     private IEnumerable<Model.Comment> Elements = new List<Model.Comment>();
     private string _searchString;
-    private List<string> _events = new();
-
+    HashSet<Model.Comment>? selected;
     // quick filter - filter gobally across multiple columns with the same input
     private Func<Model.Comment, bool> _quickFilter => x =>
     {
@@ -40,7 +40,6 @@
 
         if (x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-
         return false;
     };
 
@@ -48,7 +47,20 @@
     {
         Elements = await Db.Select<Model.Comment>().ToListAsync();
         loading = false;
+        StateHasChanged();
     }
-
+    void SelectedItemsChanged(HashSet<Model.Comment> items)
+    {
+        selected = items;
+    }
+    async void Delete()
+    {
+        var row = await Db.Delete<Model.Comment>()
+        .Where(selected)
+        .ExecuteAffrowsAsync();
+        Snackbar.Add($"删除了{row}个评论！");
+        loading = true;
+        await OnInitializedAsync();
+    }
 
 }

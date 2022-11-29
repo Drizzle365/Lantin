@@ -1,12 +1,13 @@
 ﻿@page "/admin/article/list"
 @inject IFreeSql Db
-<MudDataGrid Loading="loading" T="Model.Article" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+@inject ISnackbar Snackbar
+<MudDataGrid SelectedItemsChanged="SelectedItemsChanged" Loading="loading" T="Model.Article" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
     Hideable="true">
     <ToolBarContent>
         <MudButtonGroup Variant="Variant.Outlined">
-            <MudButton>删除</MudButton>
-            <MudButton>公开</MudButton>
-            <MudButton>私密</MudButton>
+            <MudButton OnClick="Delete">删除</MudButton>
+            <MudButton OnClick="()=>{Visibility(Model.Visibility.Open);}">公开</MudButton>
+            <MudButton OnClick="()=>{Visibility(Model.Visibility.Hide);}">私密</MudButton>
         </MudButtonGroup>
         <MudSpacer />
         <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
@@ -27,22 +28,18 @@
 
 @code {
     bool loading = true;
-    private IEnumerable<Model.Article> Elements = new List<Model.Article>();
-    private string _searchString;
-    private List<string> _events = new();
-
+    IEnumerable<Model.Article> Elements = new List<Model.Article>();
+    string _searchString;
+    HashSet<Model.Article>? selected;
     // quick filter - filter gobally across multiple columns with the same input
     private Func<Model.Article, bool> _quickFilter => x =>
     {
         if (string.IsNullOrWhiteSpace(_searchString))
             return true;
-
         if (x.Title.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-
         if (x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-
         return false;
     };
 
@@ -50,7 +47,29 @@
     {
         Elements = await Db.Select<Model.Article>().ToListAsync();
         loading = false;
+        StateHasChanged();
     }
-
-
+    void SelectedItemsChanged(HashSet<Model.Article> items)
+    {
+        selected = items;
+    }
+    async void Delete()
+    {
+        var row =await Db.Delete<Model.Article>()
+        .Where(selected)
+        .ExecuteAffrowsAsync();
+        Snackbar.Add($"删除了{row}篇文章！");
+        loading = true;
+        await OnInitializedAsync();
+    }
+    async void Visibility(Model.Visibility op)
+    {
+        var row = await Db.Update<Model.Article>()
+        .Where(selected)
+        .Set(x => x.Visibility, op)
+        .ExecuteAffrowsAsync();
+        Snackbar.Add($"修改了{row}篇文章为{op}");
+        loading = true;
+        await OnInitializedAsync();
+    }
 }
