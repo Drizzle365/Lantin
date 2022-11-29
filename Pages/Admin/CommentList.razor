@@ -1,58 +1,54 @@
 ﻿@page "/admin/comment/list"
 @inject IFreeSql Db
-<PageTitle>评论列表 | Lantin</PageTitle>
-<MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl" Items="@Elements" Hover="true" Filter="new Func<Model.Comment, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudDataGrid Loading="loading" T="Model.Comment" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+    Hideable="true">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">评论列表</MudText>
+        <MudButtonGroup Variant="Variant.Outlined">
+            <MudButton>删除</MudButton>
+        </MudButtonGroup>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
-    <HeaderContent>
-        <MudTh>昵称</MudTh>
-        <MudTh>邮箱</MudTh>
-        <MudTh>内容</MudTh>
-        <MudTh>日期</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Email">@context.Email</MudTd>
-        <MudTd DataLabel="Content">@context.Content</MudTd>
-        <MudTd DataLabel="Datetime">@context.Datetime</MudTd>
-    </RowTemplate>
-    <PagerContent>
-        <MudTablePager/>
+    <Columns>
+        <SelectColumn T="Model.Comment" />
+        <Column T="Model.Comment" Field="Name" Title="昵称"/>
+        <Column T="Model.Comment" Field="Email" Title="邮箱"/>
+        <Column T="Model.Comment" Field="Content" Title="内容"/>
+        <Column T="Model.Comment" Field="DateTime" Title="日期"/>
+    </Columns>
+    <PagerContent> 
+        <MudDataGridPager T="Model.Comment" />
     </PagerContent>
-</MudTable>
+</MudDataGrid>
 
 
 @code {
-    private bool dense = false;
-    private bool hover = true;
-    private bool striped = false;
-    private bool bordered = false;
-    private string searchString1 = "";
-    private Model.Comment selectedItem1 = null;
     bool loading = true;
-    private HashSet<Model.Comment> selectedItems = new HashSet<Model.Comment>();
-
     private IEnumerable<Model.Comment> Elements = new List<Model.Comment>();
+    private string _searchString;
+    private List<string> _events = new();
+
+    // quick filter - filter gobally across multiple columns with the same input
+    private Func<Model.Comment, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     protected override async Task OnInitializedAsync()
     {
-        Elements = await Db.Select<Model.Comment>()
-            .OrderBy("ArticleId DESC")
-            .ToListAsync();
+        Elements = await Db.Select<Model.Comment>().ToListAsync();
         loading = false;
     }
 
-    private bool FilterFunc1(Model.Comment element) => FilterFunc(element, searchString1);
-
-    private bool FilterFunc(Model.Comment element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-
-        if (element.Content.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
 
 }

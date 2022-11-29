@@ -1,59 +1,56 @@
 ﻿@page "/admin/article/list"
 @inject IFreeSql Db
-<PageTitle>文章列表 | Lantin</PageTitle>
-<MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl" Items="@Elements" Hover="true" Filter="new Func<Model.Article, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudDataGrid Loading="loading" T="Model.Article" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+    Hideable="true">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">文章列表</MudText>
+        <MudButtonGroup Variant="Variant.Outlined">
+            <MudButton>删除</MudButton>
+            <MudButton>公开</MudButton>
+            <MudButton>私密</MudButton>
+        </MudButtonGroup>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
-    <HeaderContent>
-        <MudTh>标题</MudTh>
-        <MudTh>分类</MudTh>
-        <MudTh>日期</MudTh>
-        <MudTh>可见</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Title">@context.Title</MudTd>
-        <MudTd DataLabel="CategorizeId">@context.CategorizeId</MudTd>
-        <MudTd DataLabel="Datetime">@context.Datetime</MudTd>
-        <MudTd DataLabel="Visibility">@context.Visibility</MudTd>
-    </RowTemplate>
-    <PagerContent>
-        <MudTablePager/>
+    <Columns>
+        <SelectColumn T="Model.Article" />
+        <Column T="Model.Article" Field="Title" Title="标题"/>
+        <Column T="Model.Article" Field="CategorizeId" Title="分类"/>
+        <Column T="Model.Article" Field="Visibility" Title="可见"/>
+        <Column T="Model.Article" Field="DateTime" Title="日期"/>
+    </Columns>
+    <PagerContent> 
+        <MudDataGridPager T="Model.Article" />
     </PagerContent>
-</MudTable>
+</MudDataGrid>
 
 
 @code {
-    private bool dense = false;
-    private bool hover = true;
-    private bool striped = false;
-    private bool bordered = false;
-    private string searchString1 = "";
-    private Model.Article selectedItem1 = null;
     bool loading = true;
-    private HashSet<Model.Article> selectedItems = new HashSet<Model.Article>();
-
     private IEnumerable<Model.Article> Elements = new List<Model.Article>();
+    private string _searchString;
+    private List<string> _events = new();
+
+    // quick filter - filter gobally across multiple columns with the same input
+    private Func<Model.Article, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Title.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     protected override async Task OnInitializedAsync()
     {
-        Elements = await Db.Select<Model.Article>()
-            .OrderBy("ArticleId DESC")
-            .ToListAsync();
+        Elements = await Db.Select<Model.Article>().ToListAsync();
         loading = false;
     }
 
-    private bool FilterFunc1(Model.Article element) => FilterFunc(element, searchString1);
-
-    private bool FilterFunc(Model.Article element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Content.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
 
 }

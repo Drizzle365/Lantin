@@ -45,10 +45,10 @@
             <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
             <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(_article.Content?.Length) 字</MudChip>
             <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
-                @($"{_article.Datetime.Year}年{_article.Datetime.Month}月{_article.Datetime.Day}日")
+                @($"{_article.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
             </MudChip>
             <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
-                @($"{_article.Datetime.Hour}:{_article.Datetime.Minute}")
+                @($"{_article.DateTime.Hour}:{_article.DateTime.Minute}")
             </MudChip>
             <br/><br/>
             <MudText Typo="Typo.body1" Class="pb-8">
@@ -86,7 +86,7 @@
                                         <MudText Typo="Typo.body1">@item.Name</MudText>
                                     </NavLink>
                                 }
-                                <MudText Typo="Typo.body2" Color="Color.Secondary">@item.Datetime</MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@item.DateTime</MudText>
                             </CardHeaderContent>
                             <CardHeaderActions>
                                 <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
@@ -193,7 +193,7 @@
                 Name = _name,
                 Url = _url,
                 Content = _content,
-                Datetime = DateTime.Now
+                DateTime = DateTime.Now
             })
             .ExecuteIdentityAsync();
         _content = null;

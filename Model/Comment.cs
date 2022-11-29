@@ -13,5 +13,5 @@ public class Comment
     public string? Url { get; set; }
 
     public string? Content { get; set; }
-    public DateTime Datetime { get; set; }
+    public DateTime DateTime { get; set; }
 }

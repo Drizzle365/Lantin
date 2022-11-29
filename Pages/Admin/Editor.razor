@@ -61,7 +61,7 @@
         await Db.Insert(new Model.Article
         {
             Content = content,
-            Datetime = DateTime.Now,
+            DateTime = DateTime.Now,
             Title = _title
         })
             .ExecuteIdentityAsync();
