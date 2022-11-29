@@ -1,7 +1,7 @@
 ﻿@page "/admin/comment/list"
 @inject IFreeSql Db
 <PageTitle>评论列表 | Lantin</PageTitle>
-<MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl"  Items="@Elements" Hover="true"  Filter="new Func<Model.Comment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudTable Loading="@loading" LoadingProgressColor="Color.Info" Elevation="0" Class="rounded-xl" Items="@Elements" Hover="true" Filter="new Func<Model.Comment, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">评论列表</MudText>
     </ToolBarContent>
@@ -18,7 +18,7 @@
         <MudTd DataLabel="Datetime">@context.Datetime</MudTd>
     </RowTemplate>
     <PagerContent>
-        <MudTablePager />
+        <MudTablePager/>
     </PagerContent>
 </MudTable>
 
@@ -38,8 +38,8 @@
     protected override async Task OnInitializedAsync()
     {
         Elements = await Db.Select<Model.Comment>()
-        .OrderBy("ArticleId DESC")
-        .ToListAsync();
+            .OrderBy("ArticleId DESC")
+            .ToListAsync();
         loading = false;
     }
 
@@ -54,5 +54,5 @@
             return true;
         return false;
     }
-}
 
+}

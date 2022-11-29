@@ -7,12 +7,12 @@
     <MudPaper Class="pa-10 rounded-xl" Elevation="0">
         <MudText Typo="Typo.h5">Lantin | 登录</MudText>
         <MudForm>
-                    <MudTextField T="string" Label="邮箱" Required="true" RequiredError="Email is required!" />
-                    <MudTextField T="string" Label="密码" InputType="InputType.Password" Required="true" RequiredError="Password is required!"/>
-                    <div class="mt-3 d-flex align-center justify-space-between">
-                        <MudCheckBox T="bool" Label="记住我!"  />
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">登录</MudButton>
-                    </div>
-            </MudForm>   
+            <MudTextField T="string" Label="邮箱" Required="true" RequiredError="Email is required!"/>
+            <MudTextField T="string" Label="密码" InputType="InputType.Password" Required="true" RequiredError="Password is required!"/>
+            <div class="mt-3 d-flex align-center justify-space-between">
+                <MudCheckBox T="bool" Label="记住我!"/>
+                <MudButton Href="/admin" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">登录</MudButton>
+            </div>
+        </MudForm>
     </MudPaper>
 </MudStack>
