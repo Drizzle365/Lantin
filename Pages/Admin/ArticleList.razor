@@ -8,7 +8,7 @@
             <MudButton OnClick="Delete">删除</MudButton>
             <MudButton OnClick="()=>{Visibility(Model.Visibility.Open);}">公开</MudButton>
             <MudButton OnClick="()=>{Visibility(Model.Visibility.Hide);}">私密</MudButton>
-        </MudButtonGroup>
+        </MudButtonGroup> 
         <MudSpacer />
         <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
             AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>

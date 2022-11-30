@@ -37,11 +37,11 @@ var app = builder.Build();
 
 using (IServiceScope serviceScope = app.Services.CreateScope())
 {
-    // var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
-    // freeSql.CodeFirst.SyncStructure(typeof(Article));
-    // freeSql.CodeFirst.SyncStructure(typeof(Comment));
-    // freeSql.CodeFirst.SyncStructure(typeof(User));
-
+     var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
+     freeSql.CodeFirst.SyncStructure(typeof(Article));
+     freeSql.CodeFirst.SyncStructure(typeof(Comment));
+     freeSql.CodeFirst.SyncStructure(typeof(User));
+    freeSql.CodeFirst.SyncStructure(typeof(Categorize));
 }
 
 if (!app.Environment.IsDevelopment())

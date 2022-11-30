@@ -2,6 +2,9 @@
 @inject IFreeSql Db
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+
+
+
 <PageTitle>@_article.Title | Lantin</PageTitle>
 <MudContainer Style="margin-top:100px">
 
@@ -43,7 +46,7 @@
         <MudPaper Class="pa-8 pb-14">
             <MudText Typo="Typo.h3" Class="mb-5">@_article.Title</MudText>
             <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-            <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(_article.Content?.Length) 字</MudChip>
+                <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article.Content).Length) 字</MudChip>
             <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
                 @($"{_article.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
             </MudChip>
@@ -52,7 +55,9 @@
             </MudChip>
             <br/><br/>
             <MudText Typo="Typo.body1" Class="pb-8">
-                @(new MarkupString("" + _article.Content))
+                <div class="markdown-body">
+                    @(new MarkupString(_article.Content))
+                </div>
             </MudText>
             @if (_last is not null)
             {

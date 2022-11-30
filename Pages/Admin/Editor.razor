@@ -1,13 +1,9 @@
 ﻿@page "/Admin/Editor"
+@inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject IJSRuntime Js
 @inject IFreeSql Db
 <PageTitle>文章发布 | Lantin</PageTitle>
-<style>
-    #editor{
-        min-height:300px
-    }
-</style>
 
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
     <MudToolBar>
@@ -20,7 +16,7 @@
     </MudToolBar>
 </MudPaper>
 <MudPaper Elevation="0" Class="rounded-0 pa-3">
-    <MudIconButton Icon="@Icons.Filled.Image" aria-label="delete"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.Image" OnClick="OpenImageEditor"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.LibraryMusic"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
@@ -67,5 +63,9 @@
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");
     }
-
+    void OpenImageEditor()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<Shared.Dialog.ImageEditor>("插入图片", options);
+    }
 }

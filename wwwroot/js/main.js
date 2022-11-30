@@ -16,3 +16,7 @@ function InitEditor() {
 function GetEditorData() {
     return window.editor.getData()
 }
+
+function SetEditorData(content) {
+    editor.setData(content)
+}

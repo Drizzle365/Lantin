@@ -17,6 +17,7 @@ public class Article
     public int CategorizeId { get; set; }
     public int UserId { get; set; }
     public string? Title { get; set; }
+    [Column(DbType = "longtext")]
     public string? Content { get; set; }
     public DateTime DateTime { get; set; }
     public Visibility Visibility { get; set; } = Visibility.Open;

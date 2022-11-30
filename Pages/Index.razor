@@ -15,7 +15,7 @@
                     <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
                 </MudLink><br/>
                 <MudText Typo="Typo.body2">
-                    @ReContent(item.Content)
+                    @Utility.ReContent(item.Content)
                 </MudText>
             </MudCardContent>
             <MudCardActions>
@@ -58,19 +58,13 @@
     async Task GetPage(int page = 1, int size = 5)
     {
         _articles = await Db.Select<Model.Article>()
+        .Where(x=>x.Visibility!=Model.Visibility.Hide)
             .Offset((page - 1) * size)
             .Limit(size)
             .OrderBy("ArticleId DESC")
             .ToListAsync();
     }
 
-    string ReContent(string? s)
-    {
-        if (s is null)
-            return "";
-        Regex reg = new("<[^>]+>");
-        var temp = reg.Replace(s, "");
-        return temp.Replace("&nbsp;", " ");
-    }
+
 
 }

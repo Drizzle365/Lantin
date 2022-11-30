@@ -1,0 +1,7 @@
+﻿#editor {
+    min-height: 300px;
+}
+
+#editor {
+    --ck-focus-ring: none;
+}
