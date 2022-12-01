@@ -18,7 +18,7 @@
 <MudPaper Elevation="0" Class="rounded-0 pa-3">
     <MudIconButton Icon="@Icons.Filled.Image" OnClick="OpenImageEditor"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.LibraryMusic"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="OpenMusicEditor"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
     <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
         <MudChip Color="Color.Success" Default="true">公开</MudChip>
@@ -67,5 +67,11 @@
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<Shared.Dialog.ImageEditor>("插入图片", options);
+    }
+
+    void OpenMusicEditor()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<Shared.Dialog.MusicEditor>("插入网易云音乐", options);
     }
 }

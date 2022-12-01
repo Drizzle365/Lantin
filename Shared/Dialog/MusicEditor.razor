@@ -1,0 +1,19 @@
+﻿@inject IJSRuntime Js
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="musicId"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined" OnClick="InsertByUrl">插入</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    string musicId = "";
+    async void InsertByUrl()
+    {
+
+        var content = await Js.InvokeAsync<string>("GetEditorData");
+        Console.WriteLine(content + $"<iframe frameborder='no' border='0' marginwidth='0' marginheight='0' width=100% height=86 src='//music.163.com/outchain/player?type=2&id=1896178370&auto=1&height=66'>{musicId}</iframe>");
+        await Js.InvokeVoidAsync("SetEditorData", content + $"<iframe frameborder='no' border='0' marginwidth='0' marginheight='0' width=100% height=86 src='//music.163.com/outchain/player?type=2&id=1896178370&auto=1&height=66'>{musicId}</iframe>");
+    }
+}
