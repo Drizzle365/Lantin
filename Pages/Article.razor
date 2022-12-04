@@ -2,7 +2,7 @@
 @inject IFreeSql Db
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
-
+@inject IJSRuntime Js
 
 
 <PageTitle>@_article.Title | Lantin</PageTitle>
@@ -151,7 +151,10 @@
     {
         await Load();
     }
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("InitHighlight");
+    }
     async Task Load()
     {
         _article = await Db.Select<Model.Article>().Where(x => x.ArticleId == Id).FirstAsync();

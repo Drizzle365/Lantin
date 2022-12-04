@@ -1,7 +1,6 @@
 ﻿// noinspection JSUnresolvedVariable
 
 function InitEditor() {
-    
     BalloonEditor
         .create(document.querySelector('#editor'), {
         })
@@ -19,4 +18,8 @@ function GetEditorData() {
 
 function SetEditorData(content) {
     editor.setData(content)
+}
+
+function InitHighlight() {
+    hljs.highlightAll();
 }

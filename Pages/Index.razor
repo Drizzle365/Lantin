@@ -15,7 +15,7 @@
                     <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
                 </MudLink><br/>
                 <MudText Typo="Typo.body2">
-                    @Utility.ReContent(item.Content)
+                    @Utility.SubStr(Utility.ReContent(item.Content),200)
                 </MudText>
             </MudCardContent>
             <MudCardActions>

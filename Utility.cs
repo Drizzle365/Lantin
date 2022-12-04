@@ -12,5 +12,16 @@ namespace Lantin
             var temp = reg.Replace(s, "");
             return temp.Replace("&nbsp;", " ");
         }
+        public static string SubStr(string? s,int n)
+        {
+            if (s is null)
+            {
+                return "";
+            }
+            if (n > s.Length)
+                return s;
+            else
+                return s.Substring(0, n) + " ···";
+        }
     }
 }
