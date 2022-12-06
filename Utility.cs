@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Lantin
 {
@@ -22,6 +24,17 @@ namespace Lantin
                 return s;
             else
                 return s.Substring(0, n) + " ···";
+        }
+        public static string EncodeMD5(string s)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(s);
+            byte[] result = MD5.HashData(data);
+            var sb = new StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                sb.Append(result[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }

@@ -13,18 +13,18 @@
     {
         @for (int i = 0; i < 3; i++)
         {
-                <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
-                <MudCardContent>
-                    <MudSkeleton Width="30%" Height="52px;" />
-                        <MudSkeleton Width="100%" Height="32px;" />
-                        <MudSkeleton Width="80%" Height="32px;" />
-                </MudCardContent>
-                <MudCardActions>
-                    <MudSkeleton Width="84px" Height="50px" Class="ml-2" />
-                    <MudSpacer></MudSpacer>
-                    <MudSkeleton  Width="135px" Height="50px" Class="ml-3" />
-                </MudCardActions>
-            </MudCard>
+            <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
+            <MudCardContent>
+                <MudSkeleton Width="30%" Height="52px;" />
+                    <MudSkeleton Width="100%" Height="32px;" />
+                    <MudSkeleton Width="80%" Height="32px;" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudSkeleton Width="84px" Height="50px" Class="ml-2" />
+                <MudSpacer></MudSpacer>
+                <MudSkeleton  Width="135px" Height="50px" Class="ml-3" />
+            </MudCardActions>
+        </MudCard>
         }
     }
     else
@@ -40,6 +40,7 @@
                         @Utility.SubStr(Utility.ReContent(item.Content),200)
                         </MudText>
                     </MudCardContent>
+
                     <MudCardActions>
                         <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
                             <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>

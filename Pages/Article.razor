@@ -78,7 +78,7 @@
                     <MudCard Class="mb-5">
                         <MudCardHeader>
                             <CardHeaderAvatar>
-                                <MudAvatar Color="Color.Secondary">@item.Name?.First()</MudAvatar>
+                                                        <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMD5(item.Email)}")"></MudAvatar>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
                                 @if (item.Url is null)
@@ -113,13 +113,13 @@
     <MudPaper Class="pa-8">
         <MudText Typo="Typo.h4">评论</MudText>
         <MudGrid Class="pt-5">
-            <MudItem xs="12">
+            <MudItem xs="12" lg="4" md="4">
                 <MudTextField @bind-Value="_email" Label="邮箱 *" Variant="Variant.Filled"/>
             </MudItem>
-            <MudItem xs="12">
+            <MudItem xs="12"  lg="4" md="4">
                 <MudTextField @bind-Value="_name" Label="昵称 *" Variant="Variant.Filled"/>
             </MudItem>
-            <MudItem xs="12">
+            <MudItem xs="12"  lg="4" md="4">
                 <MudTextField @bind-Value="_url" Label="网址" Variant="Variant.Filled"/>
             </MudItem>
             <MudItem xs="12">
