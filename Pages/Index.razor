@@ -9,52 +9,67 @@
 <TopCard></TopCard>
 
 <MudContainer Style="margin-top:100px">
-   @if (_load)
-    {
-        @for (int i = 0; i < 3; i++)
-        {
-            <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
-            <MudCardContent>
-                <MudSkeleton Width="30%" Height="52px;" />
-                    <MudSkeleton Width="100%" Height="32px;" />
-                    <MudSkeleton Width="80%" Height="32px;" />
-            </MudCardContent>
-            <MudCardActions>
-                <MudSkeleton Width="84px" Height="50px" Class="ml-2" />
-                <MudSpacer></MudSpacer>
-                <MudSkeleton  Width="135px" Height="50px" Class="ml-3" />
-            </MudCardActions>
-        </MudCard>
-        }
-    }
-    else
-    {
-        @foreach (var item in _articles)
-        {
-                <MudCard Style="background-color:#20282d;margin:20px 0;max-width:700px">
+    <MudGrid>
+        <MudItem lg="8"  md="8" sm="6" xs="12" >
+                @if (_load)
+            {
+                @for (int i = 0; i < 3; i++)
+                {
+                    <MudCard Style="background-color:#20282d;margin:20px 0;">
                     <MudCardContent>
-                        <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                            <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
-                        </MudLink><br/>
-                        <MudText Typo="Typo.body2">
-                        @Utility.SubStr(Utility.ReContent(item.Content),200)
-                        </MudText>
+                        <MudSkeleton Width="30%" Height="52px;" />
+                            <MudSkeleton Width="100%" Height="32px;" />
+                            <MudSkeleton Width="80%" Height="32px;" />
                     </MudCardContent>
-
                     <MudCardActions>
-                        <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                            <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
-                        </MudLink>
+                        <MudSkeleton Width="84px" Height="50px" Class="ml-2" />
                         <MudSpacer></MudSpacer>
-                        <MudChip Variant="Variant.Text" Color="Color.Secondary">
-                        @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
-                        </MudChip>
+                        <MudSkeleton  Width="135px" Height="50px" Class="ml-3" />
                     </MudCardActions>
                 </MudCard>
-        }
-    }
+                }
+            }
+            else
+            {
+                @foreach (var item in _articles)
+                {
+                    <MudCard Style="background-color:#20282d;margin:20px 0;">
+                            <MudCardContent>
+                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                    <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
+                                </MudLink><br/>
+                                <MudText Typo="Typo.body2">
+                                @Utility.SubStr(Utility.ReContent(item.Content),200)
+                                </MudText>
+                            </MudCardContent>
 
-    <MudPagination SelectedChanged="PageChanged" Rectangular="true" Variant="Variant.Filled" Count="@((int)(_articleCount / 5))"/>
+                            <MudCardActions>
+                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                    <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
+                                </MudLink>
+                                <MudSpacer></MudSpacer>
+                                <MudChip Variant="Variant.Text" Color="Color.Secondary">
+                                @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
+                                </MudChip>
+                            </MudCardActions>
+                        </MudCard>
+                }
+            }
+            <div style="text-align:center">
+          <MudPagination Color="Color.Secondary" SelectedChanged="PageChanged"  Variant="Variant.Text" Count="@((int)(_articleCount / 5))"/>
+
+            </div>
+        </MudItem>
+        <MudItem lg="4" md="4" sm="6" xs="12">
+            <div id="first-card">
+                <MudText Typo="Typo.h4" Style="line-height:2">你好， 我叫
+                    <span style="color:antiquewhite">时雨</span><br/>
+                    欢迎来到<br />
+                    我的Blog
+                    </MudText>
+            </div>
+        </MudItem>
+    </MudGrid>
 </MudContainer>
 
 @code{
