@@ -1,9 +1,15 @@
 ﻿#first-card {
     padding: 20px;
     border-radius: 30px;
-    margin: 20px 0;
     aspect-ratio: 1/1;
+    margin-bottom:20px;
     background-image: url('https://img1.baidu.com/it/u=3500460837,1312799978&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800');
     background-size: cover;
     background-position: center center;
+}
+.article-content:first-letter {
+    font-size: 200%;
+    font-weight: bold;
+    float: left;
+    margin-right: 20px;
 }

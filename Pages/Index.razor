@@ -10,8 +10,23 @@
 
 <MudContainer Style="margin-top:100px">
     <MudGrid>
-        <MudItem lg="8"  md="8" sm="6" xs="12" >
-                @if (_load)
+        <MudItem lg="8"  md="8" sm="6" xs="12">
+             <MudCarousel Class="mud-width-full rounded-xl" Style="height:300px" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+            <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+
+    </MudCarousel>
+        <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
+             
+    @if (_load)
             {
                 @for (int i = 0; i < 3; i++)
                 {
@@ -33,39 +48,45 @@
             {
                 @foreach (var item in _articles)
                 {
-                    <MudCard Style="background-color:#20282d;margin:20px 0;">
-                            <MudCardContent>
-                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                                    <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
-                                </MudLink><br/>
-                                <MudText Typo="Typo.body2">
-                                @Utility.SubStr(Utility.ReContent(item.Content),200)
-                                </MudText>
-                            </MudCardContent>
+                    <MudItem lg="6" md="6" sm="12" xs="12">
+                                <MudCard Style="background-color:#20282d;margin:20px 0;">
+                                    <MudCardContent>
+                                        <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                            <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
+                                        </MudLink><br/>
+                                        <MudText Typo="Typo.body2">
+                                        <div class="article-content">
+                                            @Utility.SubStr(Utility.ReContent(item.Content),200)
+                                        </div>
+                                        </MudText>
+                                    </MudCardContent>
 
-                            <MudCardActions>
-                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                                    <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
-                                </MudLink>
-                                <MudSpacer></MudSpacer>
-                                <MudChip Variant="Variant.Text" Color="Color.Secondary">
-                                @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
-                                </MudChip>
-                            </MudCardActions>
-                        </MudCard>
+                                    <MudCardActions>
+                                                                                        <MudChip Variant="Variant.Text" Color="Color.Secondary">
+                                        @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
+                                                </MudChip>
+                                        <MudSpacer></MudSpacer>
+
+                                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                                    <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
+                                                </MudLink>
+                                    </MudCardActions>
+                                </MudCard>
+                    </MudItem>
                 }
             }
+            </MudGrid>
             <div style="text-align:center">
-          <MudPagination Color="Color.Secondary" SelectedChanged="PageChanged"  Variant="Variant.Text" Count="@((int)(_articleCount / 5))"/>
+          <MudPagination Color="Color.Secondary" SelectedChanged="PageChanged"  Variant="Variant.Text" Count="@((int)(_articleCount / 8))"/>
 
             </div>
         </MudItem>
         <MudItem lg="4" md="4" sm="6" xs="12">
             <div id="first-card">
                 <MudText Typo="Typo.h4" Style="line-height:2">你好， 我叫
-                    <span style="color:antiquewhite">时雨</span><br/>
+                    <span style="color:antiquewhite">Lantin</span><br/>
                     欢迎来到<br />
-                    我的Blog
+                    我的个人博客
                     </MudText>
             </div>
             <MudPaper Class="pa-5 rounded-xl d-flex justify-space-between">
@@ -85,7 +106,6 @@
     bool _load = true;
     [Parameter]
     public int? Page { get; set; }
-
     List<Model.Article> _articles = new();
     private int SelectedIndex = -1;
     int dataSize = 4;
@@ -113,7 +133,7 @@
         NavigationManager.NavigateTo($"/{i}");
     }
 
-    async Task GetPage(int page = 1, int size = 5)
+    async Task GetPage(int page = 1, int size = 8)
     {
         if (page <= 1)
             page = 1;
