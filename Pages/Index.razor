@@ -68,6 +68,14 @@
                     我的Blog
                     </MudText>
             </div>
+            <MudPaper Class="pa-5 rounded-xl d-flex justify-space-between">
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
+                <MudIconButton Icon="@Icons.Custom.Brands.Steam" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
+                <MudIconButton Icon="@Icons.Custom.Brands.Gmail" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
+            </MudPaper>
+             <MudPaper Class="pa-5 rounded-xl d-flex mt-5">
+                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="SelectedIndex" InputLabels="@labels" Width="300px" Height="300px" />
+              </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>
@@ -79,6 +87,10 @@
     public int? Page { get; set; }
 
     List<Model.Article> _articles = new();
+    private int SelectedIndex = -1;
+    int dataSize = 4;
+    double[] data = { 35, 25, 20, 5,8,10};
+    string[] labels = { "日记", "闲言碎语", "DotNet", "JavaScript", "Python", "算法和数据结构" };
 
     protected override async Task OnInitializedAsync()
     {
