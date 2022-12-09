@@ -1,5 +1,6 @@
 ﻿@page "/admin/category"
-<PageTitle>文章分类 | Lantin</PageTitle>
+@inject WebSiteConfigService WebSiteConfigService
+<PageTitle>文章分类 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 <h3>Category</h3>
 
 @code {

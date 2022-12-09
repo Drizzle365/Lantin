@@ -1,5 +1,6 @@
 ﻿@page "/admin/setting"
-<PageTitle>设置 | Lantin</PageTitle>
+@inject WebSiteConfigService WebSiteConfigService
+<PageTitle>设置 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 <h3>设置</h3>
 
 @code {

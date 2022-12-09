@@ -1,8 +1,9 @@
 ﻿@page "/{page:int?}"
 @inject IFreeSql Db
 @inject NavigationManager NavigationManager
+@inject WebSiteConfigService WebSiteConfig
 <PageTitle>
-    Lantin | 回响
+    @WebSiteConfig.GetValue("WebSiteName") | 回响
     @if (Page is not null)
     {
         @($" - 第{Page}页")
@@ -139,6 +140,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(WebSiteConfig.GetHashCode() + " asdasd");
         _articleCount = await Db.Select<Model.Article>()
             .Where(x => x.Visibility != Model.Visibility.Hide)
             .CountAsync();

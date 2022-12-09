@@ -1,6 +1,7 @@
-﻿using MudBlazor.Services;
+﻿using Lantin.Model;
+using MudBlazor.Services;
 using MudBlazor;
-using Lantin.Model;
+using Lantin.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 Func<IServiceProvider, IFreeSql> freeSqlFactory = _ =>
@@ -17,7 +18,9 @@ Func<IServiceProvider, IFreeSql> freeSqlFactory = _ =>
         .Build();
     return freeSql;
 };
+var webSiteConfigFactory = new WebSiteConfigService();
 builder.Services.AddSingleton<IFreeSql>(freeSqlFactory);
+builder.Services.AddSingleton<WebSiteConfigService>(webSiteConfigFactory);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices(config =>
@@ -37,11 +40,14 @@ var app = builder.Build();
 
 using (IServiceScope serviceScope = app.Services.CreateScope())
 {
-     var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
-     freeSql.CodeFirst.SyncStructure(typeof(Article));
-     freeSql.CodeFirst.SyncStructure(typeof(Comment));
-     freeSql.CodeFirst.SyncStructure(typeof(User));
-    freeSql.CodeFirst.SyncStructure(typeof(Categorize));
+    var freeSql = serviceScope.ServiceProvider.GetRequiredService<IFreeSql>();
+    // freeSql.CodeFirst.SyncStructure(typeof(Article));
+    // freeSql.CodeFirst.SyncStructure(typeof(Comment));
+    // freeSql.CodeFirst.SyncStructure(typeof(User));
+    // freeSql.CodeFirst.SyncStructure(typeof(Categorize));
+    // freeSql.CodeFirst.SyncStructure(typeof(Config));
+    var webSiteConfig = serviceScope.ServiceProvider.GetRequiredService<WebSiteConfigService>();
+    webSiteConfig.Init(freeSql);
 }
 
 if (!app.Environment.IsDevelopment())

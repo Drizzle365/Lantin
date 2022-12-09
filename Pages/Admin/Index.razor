@@ -1,6 +1,7 @@
 ﻿@page "/admin"
 @inject IFreeSql Db
-<PageTitle>仪表盘 | Lantin</PageTitle>
+@inject WebSiteConfigService WebSiteConfigService
+<PageTitle>仪表盘 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 <style>
     .icon-card{
         position:absolute;

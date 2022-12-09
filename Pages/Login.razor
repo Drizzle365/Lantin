@@ -1,11 +1,10 @@
 ﻿@page "/Login"
-@using System.Text.RegularExpressions;
-@using System.ComponentModel.DataAnnotations;
+@inject WebSiteConfigService WebSiteConfigService
 @layout BlankLayout
 <PageTitle>登录 | Lantin</PageTitle>
 <MudStack Style="height:100vh" Row="false" AlignItems="AlignItems.Center" Justify="Justify.Center">
     <MudPaper Class="pa-10 rounded-xl" Elevation="0">
-        <MudText Typo="Typo.h5">Lantin | 登录</MudText>
+        <MudText Typo="Typo.h5">@WebSiteConfigService.GetValue("WebSiteName") | 登录</MudText>
         <MudForm>
             <MudTextField T="string" Label="邮箱" Required="true" RequiredError="Email is required!"/>
             <MudTextField T="string" Label="密码" InputType="InputType.Password" Required="true" RequiredError="Password is required!"/>

@@ -2,26 +2,27 @@
 @inject IFreeSql Db
 @inject ISnackbar Snackbar
 <MudDataGrid SelectedItemsChanged="SelectedItemsChanged" Loading="loading" T="Model.Article" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-    Hideable="true">
+             Hideable="true">
     <ToolBarContent>
         <MudButtonGroup Variant="Variant.Outlined">
             <MudButton OnClick="Delete">删除</MudButton>
-            <MudButton OnClick="()=>{Visibility(Model.Visibility.Open);}">公开</MudButton>
-            <MudButton OnClick="()=>{Visibility(Model.Visibility.Hide);}">私密</MudButton>
-        </MudButtonGroup> 
-        <MudSpacer />
+            <MudButton OnClick="() => { Visibility(Model.Visibility.Open); }">公开</MudButton>
+            <MudButton OnClick="() => { Visibility(Model.Visibility.Hide); }">私密</MudButton>
+        </MudButtonGroup>
+        <MudSpacer/>
         <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+        </MudTextField>
     </ToolBarContent>
     <Columns>
-        <SelectColumn T="Model.Article" />
+        <SelectColumn T="Model.Article"/>
         <Column T="Model.Article" Field="Title" Title="标题"/>
         <Column T="Model.Article" Field="CategorizeId" Title="分类"/>
         <Column T="Model.Article" Field="Visibility" Title="可见"/>
         <Column T="Model.Article" Field="DateTime" Title="日期"/>
     </Columns>
-    <PagerContent> 
-        <MudDataGridPager T="Model.Article" />
+    <PagerContent>
+        <MudDataGridPager T="Model.Article"/>
     </PagerContent>
 </MudDataGrid>
 
@@ -49,27 +50,31 @@
         loading = false;
         StateHasChanged();
     }
+
     void SelectedItemsChanged(HashSet<Model.Article> items)
     {
         selected = items;
     }
+
     async void Delete()
     {
-        var row =await Db.Delete<Model.Article>()
-        .Where(selected)
-        .ExecuteAffrowsAsync();
+        var row = await Db.Delete<Model.Article>()
+            .Where(selected)
+            .ExecuteAffrowsAsync();
         Snackbar.Add($"删除了{row}篇文章！");
         loading = true;
         await OnInitializedAsync();
     }
+
     async void Visibility(Model.Visibility op)
     {
         var row = await Db.Update<Model.Article>()
-        .Where(selected)
-        .Set(x => x.Visibility, op)
-        .ExecuteAffrowsAsync();
+            .Where(selected)
+            .Set(x => x.Visibility, op)
+            .ExecuteAffrowsAsync();
         Snackbar.Add($"修改了{row}篇文章为{op}");
         loading = true;
         await OnInitializedAsync();
     }
+
 }

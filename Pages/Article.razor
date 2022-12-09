@@ -3,9 +3,9 @@
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IJSRuntime Js
+@inject WebSiteConfigService WebSiteConfig
 
-
-<PageTitle>@_article.Title | Lantin</PageTitle>
+<PageTitle>@_article.Title | @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
 <MudContainer Style="margin-top:100px">
 
     @if (_load)
@@ -43,7 +43,7 @@
     }
     else
     {
-        <MudPaper Class="pa-8 pb-14">
+        <MudPaper Class="pa-8 pb-16">
             <MudText Typo="Typo.h3" Class="mb-5">@_article.Title</MudText>
             <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
             <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article.Content).Length) 字</MudChip>
@@ -59,7 +59,7 @@
                     @(new MarkupString(_article.Content!))
                 </div>
             </MudText>
-            <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px">
+            <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
                 本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
                 转载请注明来自
                 <MudLink Href="/">
@@ -72,20 +72,20 @@
             }
             @if (_next is not null)
             {
-                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right;" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
             }
         </MudPaper>
         <br/>
         <br/>
         @if (_comments.Count > 0)
         {
-            <MudPaper Class="pa-4">
+            <MudPaper Class="pa-4" Elevation="0">
                 @foreach (var item in _comments)
                 {
-                    <MudCard Class="mb-5">
+                    <MudCard Class="mb-5" Elevation="0">
                         <MudCardHeader>
                             <CardHeaderAvatar>
-                                <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMD5(item.Email)}")"></MudAvatar>
+                                <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMd5(item.Email)}")"></MudAvatar>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
                                 @if (item.Url is null)

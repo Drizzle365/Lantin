@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace Lantin
 {
-    public static class Utility
+    public static partial class Utility
     {
         public static string ReContent(string? s)
         {
             if (s is null)
                 return "";
-            Regex reg = new("<[^>]+>");
+            var reg = MyRegex();
             var temp = reg.Replace(s, "");
             return temp.Replace("&nbsp;", " ");
         }
@@ -20,21 +20,24 @@ namespace Lantin
             {
                 return "";
             }
-            if (n > s.Length)
-                return s;
-            else
-                return s.Substring(0, n) + " ···";
+
+            return n > s.Length ? s : string.Concat(s.AsSpan(0, n), " ···");
         }
-        public static string EncodeMD5(string? s)
+        public static string EncodeMd5(string? s)
         {
-            byte[] data = Encoding.UTF8.GetBytes(s);
-            byte[] result = MD5.HashData(data);
+            if (s == null) return "";
+            var data = Encoding.UTF8.GetBytes(s);
+            var result = MD5.HashData(data);
             var sb = new StringBuilder();
-            for (int i = 0; i < result.Length; i++)
+            foreach (var t in result)
             {
-                sb.Append(result[i].ToString("x2"));
+                sb.Append(t.ToString("x2"));
             }
             return sb.ToString();
+
         }
+
+        [GeneratedRegex("<[^>]+>")]
+        private static partial Regex MyRegex();
     }
 }
