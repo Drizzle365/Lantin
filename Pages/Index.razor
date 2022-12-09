@@ -91,12 +91,32 @@
             </div>
             <MudPaper Class="pa-5 rounded-xl d-flex justify-space-between">
                 <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
-                <MudIconButton Icon="@Icons.Custom.Brands.Steam" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
                 <MudIconButton Icon="@Icons.Custom.Brands.Gmail" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
+                <MudIconButton Icon="fab fa-qq" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
+                <MudIconButton Icon="fab fa-weixin" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
             </MudPaper>
-             <MudPaper Class="pa-5 rounded-xl d-flex mt-5">
+            <MudPaper Class="pa-5 rounded-xl mt-5">
                  <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="SelectedIndex" InputLabels="@labels" Width="300px" Height="300px" />
               </MudPaper>
+            <MudPaper Class="pa-5 rounded-xl mt-5">
+                 <MudList Clickable="true">
+        <MudListItem >
+            <MudText Style="float:left;margin-top:8px">运行时间</MudText>
+            <MudChip Style="float:right">365天</MudChip>
+        </MudListItem>
+                <MudListItem >
+            <MudText Style="float:left;margin-top:8px">技术支持</MudText>
+        </MudListItem>
+                <MudDivider Class="ma-2"></MudDivider>
+                <MudChip>.Net7</MudChip>
+                <MudChip Color="Color.Secondary">Blazor</MudChip>
+                <MudChip Color="Color.Info">C#</MudChip>
+                <MudChip Color="Color.Success">MudBlazor</MudChip>
+                <MudChip Color="Color.Warning">CKEditor</MudChip>
+                <MudChip Color="Color.Error">FreeSql</MudChip>
+                <MudChip Color="Color.Dark">ASP.NET</MudChip>
+    </MudList>
+            </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>
