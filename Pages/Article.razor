@@ -46,7 +46,7 @@
         <MudPaper Class="pa-8 pb-14">
             <MudText Typo="Typo.h3" Class="mb-5">@_article.Title</MudText>
             <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-                <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article.Content).Length) 字</MudChip>
+            <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article.Content).Length) 字</MudChip>
             <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
                 @($"{_article.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
             </MudChip>
@@ -56,14 +56,16 @@
             <br/><br/>
             <MudText Typo="Typo.body1" Class="pb-8">
                 <div class="markdown-body">
-                    @(new MarkupString(_article.Content))
+                    @(new MarkupString(_article.Content!))
                 </div>
             </MudText>
-               <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px">
-                    本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议，
-                    转载请注明来自 <MudLink Href="/" ><MudChip Variant="Variant.Outlined" Color="Color.Secondary">Lantin</MudChip></MudLink>
-
-        </MudPaper>
+            <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px">
+                本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
+                转载请注明来自
+                <MudLink Href="/">
+                    <MudChip Variant="Variant.Outlined" Color="Color.Secondary">Lantin</MudChip>
+                </MudLink>
+            </MudPaper>
             @if (_last is not null)
             {
                 <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@_last?.Title</MudButton>
@@ -83,7 +85,7 @@
                     <MudCard Class="mb-5">
                         <MudCardHeader>
                             <CardHeaderAvatar>
-                                                        <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMD5(item.Email)}")"></MudAvatar>
+                                <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMD5(item.Email)}")"></MudAvatar>
                             </CardHeaderAvatar>
                             <CardHeaderContent>
                                 @if (item.Url is null)
@@ -121,10 +123,10 @@
             <MudItem xs="12" lg="4" md="4">
                 <MudTextField @bind-Value="_email" Label="邮箱 *" Variant="Variant.Filled"/>
             </MudItem>
-            <MudItem xs="12"  lg="4" md="4">
+            <MudItem xs="12" lg="4" md="4">
                 <MudTextField @bind-Value="_name" Label="昵称 *" Variant="Variant.Filled"/>
             </MudItem>
-            <MudItem xs="12"  lg="4" md="4">
+            <MudItem xs="12" lg="4" md="4">
                 <MudTextField @bind-Value="_url" Label="网址" Variant="Variant.Filled"/>
             </MudItem>
             <MudItem xs="12">
@@ -156,10 +158,12 @@
     {
         await Load();
     }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await Js.InvokeVoidAsync("InitHighlight");
     }
+
     async Task Load()
     {
         _article = await Db.Select<Model.Article>().Where(x => x.ArticleId == Id).FirstAsync();

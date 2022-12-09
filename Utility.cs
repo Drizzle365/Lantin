@@ -25,7 +25,7 @@ namespace Lantin
             else
                 return s.Substring(0, n) + " ···";
         }
-        public static string EncodeMD5(string s)
+        public static string EncodeMD5(string? s)
         {
             byte[] data = Encoding.UTF8.GetBytes(s);
             byte[] result = MD5.HashData(data);
