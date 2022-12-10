@@ -5,116 +5,79 @@
 @inject IJSRuntime Js
 @inject WebSiteConfigService WebSiteConfig
 
-<PageTitle>@_article.Title | @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
+<PageTitle>@_article?.Title | @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
 <MudContainer Style="margin-top:100px">
-
-    @if (_load)
-    {
-        <MudPaper Class="pa-8 pb-14">
-            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="80px"/>
-            <MudSkeleton Width="30%" Height="42px;"/>
-            <MudSkeleton Width="80%"/>
-            <MudSkeleton Width="100%"/>
-            <MudCardActions>
-                <MudSkeleton Width="160px" Height="60px" Class="ml-2"/>
-                <MudSpacer></MudSpacer>
-                <MudSkeleton Width="160px" Height="60px" Class="ml-3"/>
-            </MudCardActions>
+    <MudPaper Class="pa-8 pb-16">
+        <MudText Typo="Typo.h3" Class="mb-5">@_article?.Title</MudText>
+        <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
+        <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article?.Content).Length) 字</MudChip>
+        <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
+            @($"{_article!.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
+        </MudChip>
+        <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
+            @($"{_article!.DateTime.Hour}:{_article.DateTime.Minute}")
+        </MudChip>
+        <br/><br/>
+        <MudText Typo="Typo.body1" Class="pb-8">
+            <div class="markdown-body">
+                @(new MarkupString(_article?.Content!))
+            </div>
+        </MudText>
+        <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
+            本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
+            转载请注明来自
+            <MudLink Href="/">
+                <MudChip Variant="Variant.Outlined" Color="Color.Secondary">Lantin</MudChip>
+            </MudLink>
         </MudPaper>
-        <br>
-        <br>
-        <MudCard>
-            <MudCardHeader>
-                <CardHeaderAvatar>
-                    <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="40px" Width="40px"/>
-                </CardHeaderAvatar>
-                <CardHeaderContent>
-                    <MudSkeleton Animation="Animation.Wave" Width="80px"/>
-                    <MudSkeleton Animation="Animation.Wave" Width="160px"/>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudSkeleton Animation="Animation.Wave"/>
-                <MudSkeleton Animation="Animation.Wave"/>
-            </MudCardContent>
-        </MudCard>
-        <br>
-        <br>
-    }
-    else
-    {
-        <MudPaper Class="pa-8 pb-16">
-            <MudText Typo="Typo.h3" Class="mb-5">@_article.Title</MudText>
-            <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-            <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article.Content).Length) 字</MudChip>
-            <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
-                @($"{_article.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
-            </MudChip>
-            <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
-                @($"{_article.DateTime.Hour}:{_article.DateTime.Minute}")
-            </MudChip>
-            <br/><br/>
-            <MudText Typo="Typo.body1" Class="pb-8">
-                <div class="markdown-body">
-                    @(new MarkupString(_article.Content!))
-                </div>
-            </MudText>
-            <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
-                本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
-                转载请注明来自
-                <MudLink Href="/">
-                    <MudChip Variant="Variant.Outlined" Color="Color.Secondary">Lantin</MudChip>
-                </MudLink>
-            </MudPaper>
-            @if (_last is not null)
-            {
-                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@_last?.Title</MudButton>
-            }
-            @if (_next is not null)
-            {
-                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right;" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
-            }
-        </MudPaper>
-        <br/>
-        <br/>
-        @if (_comments.Count > 0)
+        @if (_last is not null)
         {
-            <MudPaper Class="pa-4" Elevation="0">
-                @foreach (var item in _comments)
-                {
-                    <MudCard Class="mb-5" Elevation="0">
-                        <MudCardHeader>
-                            <CardHeaderAvatar>
-                                <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMd5(item.Email)}")"></MudAvatar>
-                            </CardHeaderAvatar>
-                            <CardHeaderContent>
-                                @if (item.Url is null)
-                                {
-                                    <MudText Typo="Typo.body1">@item.Name</MudText>
-                                }
-                                else
-                                {
-                                    <NavLink Href="@item.Url" Target="_blank">
-                                        <MudText Typo="Typo.body1">@item.Name</MudText>
-                                    </NavLink>
-                                }
-                                <MudText Typo="Typo.body2" Color="Color.Secondary">@item.DateTime</MudText>
-                            </CardHeaderContent>
-                            <CardHeaderActions>
-                                <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
-                            </CardHeaderActions>
-                        </MudCardHeader>
-                        <MudCardContent>
-                            <MudText Typo="Typo.body2">
-                                @item.Content
-                            </MudText>
-                        </MudCardContent>
-                    </MudCard>
-                }
-            </MudPaper>
-            <br/>
-            <br/>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@_last?.Title</MudButton>
         }
+        @if (_next is not null)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right;" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
+        }
+    </MudPaper>
+    <br/>
+    <br/>
+    @if (_comments.Count > 0)
+    {
+        <MudPaper Class="pa-4" Elevation="0">
+            @foreach (var item in _comments)
+            {
+                <MudCard Class="mb-5" Elevation="0">
+                    <MudCardHeader>
+                        <CardHeaderAvatar>
+                            <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMd5(item.Email)}")"></MudAvatar>
+                        </CardHeaderAvatar>
+                        <CardHeaderContent>
+                            @if (item.Url is null)
+                            {
+                                <MudText Typo="Typo.body1">@item.Name</MudText>
+                            }
+                            else
+                            {
+                                <NavLink Href="@item.Url" Target="_blank">
+                                    <MudText Typo="Typo.body1">@item.Name</MudText>
+                                </NavLink>
+                            }
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@item.DateTime</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">
+                            @item.Content
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudPaper>
+        <br/>
+        <br/>
     }
 
     <MudPaper Class="pa-8">
@@ -140,12 +103,11 @@
 </MudContainer>
 
 @code {
-    bool _load = true;
 
     [Parameter]
     public int Id { get; set; }
 
-    Model.Article _article = new();
+    Model.Article? _article;
     Model.Article? _last;
     Model.Article? _next;
     string? _email;
@@ -154,9 +116,9 @@
     string? _content;
     List<Model.Comment> _comments = new();
 
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
-        await Load();
+        Load();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -164,34 +126,31 @@
         await Js.InvokeVoidAsync("InitHighlight");
     }
 
-    async Task Load()
+    void Load()
     {
-        _article = await Db.Select<Model.Article>().Where(x => x.ArticleId == Id).FirstAsync();
-        _comments = await Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToListAsync();
-        _last = await Db.Select<Model.Article>()
-            .Where(x => x.ArticleId < Id).OrderBy("ArticleId DESC").Limit(1).FirstAsync();
-        _next = await Db.Select<Model.Article>()
-            .Where(x => x.ArticleId > Id).Limit(1).FirstAsync();
-        _load = false;
+        _article = Db.Select<Model.Article>().Where(x => x.ArticleId == Id).First();
+        _comments = Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToList();
+        _last = Db.Select<Model.Article>()
+            .Where(x => x.ArticleId < Id).OrderBy("ArticleId DESC").Limit(1).First();
+        _next = Db.Select<Model.Article>()
+            .Where(x => x.ArticleId > Id).Limit(1).First();
         StateHasChanged();
     }
 
-    async void GetLast()
+    void GetLast()
     {
-        _load = true;
         StateHasChanged();
         Id = _last!.ArticleId;
         NavigationManager.NavigateTo($"/article/{_last?.ArticleId}");
-        await Load();
+        Load();
     }
 
-    async void GetNext()
+    void GetNext()
     {
-        _load = true;
         StateHasChanged();
         Id = _next!.ArticleId;
         NavigationManager.NavigateTo($"/article/{_next?.ArticleId}");
-        await Load();
+        Load();
     }
 
     async void PostComment()

@@ -50,7 +50,7 @@
     async Task Post()
     {
         var content = await GetEditorData();
-        if (_title == null || content == null)
+        if (_title == null)
         {
             Snackbar.Add("请输入标题和内容再发布");
             return;

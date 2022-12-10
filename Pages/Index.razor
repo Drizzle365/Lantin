@@ -28,55 +28,33 @@
 
             </MudCarousel>
             <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
-
-                @if (_load)
+                @foreach (var item in _articles)
                 {
-                    @for (int i = 0; i < 3; i++)
-                    {
+                    <MudItem lg="6" md="6" sm="12" xs="12">
                         <MudCard Style="background-color:#20282d;margin:20px 0;">
                             <MudCardContent>
-                                <MudSkeleton Width="30%" Height="52px;"/>
-                                <MudSkeleton Width="100%" Height="32px;"/>
-                                <MudSkeleton Width="80%" Height="32px;"/>
+                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                    <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
+                                </MudLink><br/>
+                                <MudText Typo="Typo.body2">
+                                    <div class="article-content">
+                                        @Utility.SubStr(Utility.ReContent(item.Content), 200)
+                                    </div>
+                                </MudText>
                             </MudCardContent>
+
                             <MudCardActions>
-                                <MudSkeleton Width="84px" Height="50px" Class="ml-2"/>
+                                <MudChip Variant="Variant.Text" Color="Color.Secondary">
+                                    @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
+                                </MudChip>
                                 <MudSpacer></MudSpacer>
-                                <MudSkeleton Width="135px" Height="50px" Class="ml-3"/>
+
+                                <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
+                                    <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
+                                </MudLink>
                             </MudCardActions>
                         </MudCard>
-                    }
-                }
-                else
-                {
-                    @foreach (var item in _articles)
-                    {
-                        <MudItem lg="6" md="6" sm="12" xs="12">
-                            <MudCard Style="background-color:#20282d;margin:20px 0;">
-                                <MudCardContent>
-                                    <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                                        <MudText Typo="Typo.h5" Style="cursor:pointer">@item.Title</MudText>
-                                    </MudLink><br/>
-                                    <MudText Typo="Typo.body2">
-                                        <div class="article-content">
-                                            @Utility.SubStr(Utility.ReContent(item.Content), 200)
-                                        </div>
-                                    </MudText>
-                                </MudCardContent>
-
-                                <MudCardActions>
-                                    <MudChip Variant="Variant.Text" Color="Color.Secondary">
-                                        @($"{item.DateTime.Year}年{item.DateTime.Month}月{item.DateTime.Day}日")
-                                    </MudChip>
-                                    <MudSpacer></MudSpacer>
-
-                                    <MudLink Href="@($"/article/{item.ArticleId}")" Color="Color.Surface">
-                                        <MudButton Variant="Variant.Text" Color="Color.Secondary">阅读更多</MudButton>
-                                    </MudLink>
-                                </MudCardActions>
-                            </MudCard>
-                        </MudItem>
-                    }
+                    </MudItem>
                 }
             </MudGrid>
             <div style="text-align:center">
@@ -100,7 +78,7 @@
                 <MudIconButton Icon="fab fa-weixin" Color="Color.Inherit" aria-label="add to favorite"></MudIconButton>
             </MudPaper>
             <MudPaper Class="pa-5 rounded-xl mt-5">
-                <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="SelectedIndex" InputLabels="@labels" Width="300px" Height="300px"/>
+                <MudChart ChartType="ChartType.Pie" InputData="@_data" @bind-SelectedIndex="_selectedIndex" InputLabels="@_labels" Width="300px" Height="300px"/>
             </MudPaper>
             <MudPaper Class="pa-5 rounded-xl mt-5">
                 <MudList Clickable="true">
@@ -127,51 +105,47 @@
 
 @code{
     long _articleCount;
-    bool _load = true;
 
     [Parameter]
     public int? Page { get; set; }
 
     List<Model.Article> _articles = new();
-    private int SelectedIndex = -1;
-    int dataSize = 4;
-    double[] data = { 35, 25, 20, 5, 8, 10 };
-    string[] labels = { "日记", "闲言碎语", "DotNet", "JavaScript", "Python", "算法和数据结构" };
+    private int _selectedIndex = -1;
+    int _dataSize = 4;
+    double[] _data = { 35, 25, 20, 5, 8, 10 };
+    string[] _labels = { "日记", "闲言碎语", "DotNet", "JavaScript", "Python", "算法和数据结构" };
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Console.WriteLine(WebSiteConfig.GetHashCode() + " asdasd");
-        _articleCount = await Db.Select<Model.Article>()
+        _articleCount = Db.Select<Model.Article>()
             .Where(x => x.Visibility != Model.Visibility.Hide)
-            .CountAsync();
+            .Count();
         if (Page is null)
         {
-            await GetPage();
+            GetPage();
         }
         else
         {
-            await GetPage((int)Page);
+            GetPage((int)Page);
         }
     }
 
-    async void PageChanged(int i)
+    void PageChanged(int i)
     {
-        await GetPage(i);
+        GetPage(i);
         NavigationManager.NavigateTo($"/{i}");
     }
 
-    async Task GetPage(int page = 1, int size = 8)
+    void GetPage(int page = 1, int size = 8)
     {
         if (page <= 1)
             page = 1;
-        _load = true;
-        _articles = await Db.Select<Model.Article>()
+        _articles = Db.Select<Model.Article>()
             .Where(x => x.Visibility != Model.Visibility.Hide)
             .Offset((page - 1) * size)
             .Limit(size)
             .OrderBy("ArticleId DESC")
-            .ToListAsync();
-        _load = false;
+            .ToList();
     }
 
 }
