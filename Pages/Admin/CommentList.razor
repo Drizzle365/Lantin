@@ -1,7 +1,9 @@
 ﻿@page "/admin/comment/list"
 @inject IFreeSql Db
 @inject ISnackbar Snackbar
-<MudDataGrid Loading="loading" SelectedItemsChanged="SelectedItemsChanged" T="Model.Comment" MultiSelection="true" Items="@Elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+@inject WebSiteConfigService WebSiteConfigService
+<PageTitle>评论列表 – @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
+<MudDataGrid Loading="_loading" SelectedItemsChanged="SelectedItemsChanged" T="Model.Comment" MultiSelection="true" Items="@_elements" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@QuickFilter"
     Hideable="true">
     <ToolBarContent>
         <MudButtonGroup Variant="Variant.Outlined">
@@ -25,41 +27,40 @@
 
 
 @code {
-    bool loading = true;
-    private IEnumerable<Model.Comment> Elements = new List<Model.Comment>();
-    private string _searchString;
-    HashSet<Model.Comment>? selected;
-    // quick filter - filter gobally across multiple columns with the same input
-    private Func<Model.Comment, bool> _quickFilter => x =>
+    bool _loading = true;
+    private IEnumerable<Model.Comment> _elements = new List<Model.Comment>();
+    private string? _searchString;
+    HashSet<Model.Comment>? _selected;
+    private Func<Model.Comment, bool> QuickFilter => x =>
     {
-        if (string.IsNullOrWhiteSpace(_searchString))
+        if (_searchString != null && string.IsNullOrWhiteSpace(_searchString))
             return true;
 
-        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        if (_searchString != null && x.Name != null && x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
-        if (x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        if (_searchString != null && x.Content != null && x.Content.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     };
 
     protected override async Task OnInitializedAsync()
     {
-        Elements = await Db.Select<Model.Comment>().ToListAsync();
-        loading = false;
+        _elements = await Db.Select<Model.Comment>().ToListAsync();
+        _loading = false;
         StateHasChanged();
     }
     void SelectedItemsChanged(HashSet<Model.Comment> items)
     {
-        selected = items;
+        _selected = items;
     }
     async void Delete()
     {
         var row = await Db.Delete<Model.Comment>()
-        .Where(selected)
+        .Where(_selected)
         .ExecuteAffrowsAsync();
         Snackbar.Add($"删除了{row}个评论！");
-        loading = true;
+        _loading = true;
         await OnInitializedAsync();
     }
 

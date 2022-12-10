@@ -1,7 +1,7 @@
 ﻿@page "/admin"
 @inject IFreeSql Db
 @inject WebSiteConfigService WebSiteConfigService
-<PageTitle>仪表盘 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
+<PageTitle>仪表盘 – @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 <style>
     .icon-card{
         position:absolute;
@@ -45,7 +45,7 @@
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Filled.Article"/>
                 <MudText Typo="Typo.h3" Class="mt-7">
-                    @articleCount
+                    @_articleCount
                 </MudText>
             </MudPaper>
         </MudPaper>
@@ -58,7 +58,7 @@
                 </MudText>
                 <MudIcon Class="icon-card" Icon="@Icons.Filled.Comment"/>
                 <MudText Typo="Typo.h3" Class="mt-7">
-                    @commentCount
+                    @_commentCount
                 </MudText>
             </MudPaper>
         </MudPaper>
@@ -79,13 +79,13 @@
 </MudGrid>
 
 @code{
-    long articleCount;
-    long commentCount;
+    long _articleCount;
+    long _commentCount;
 
     protected override void OnInitialized()
     {
-        articleCount = Db.Select<Model.Article>().Count();
-        commentCount = Db.Select<Model.Comment>().Count();
+        _articleCount = Db.Select<Model.Article>().Count();
+        _commentCount = Db.Select<Model.Comment>().Count();
     }
 
 }

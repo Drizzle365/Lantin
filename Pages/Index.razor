@@ -3,12 +3,13 @@
 @inject NavigationManager NavigationManager
 @inject WebSiteConfigService WebSiteConfig
 <PageTitle>
-    @WebSiteConfig.GetValue("WebSiteName") | 回响
+    @WebSiteConfig.GetValue("WebSiteName") – @WebSiteConfig.GetValue("WebSiteSubhead")
     @if (Page is not null)
     {
         @($" - 第{Page}页")
     }
 </PageTitle>
+
 <TopCard></TopCard>
 
 <MudContainer Style="margin-top:100px">
@@ -90,7 +91,7 @@
                         <MudText Style="float:left;margin-top:8px">技术支持</MudText>
                     </MudListItem>
                     <MudDivider Class="ma-2"></MudDivider>
-                    <MudChip>.Net7</MudChip>
+                    <MudChip>DotNet7</MudChip>
                     <MudChip Color="Color.Secondary">Blazor</MudChip>
                     <MudChip Color="Color.Info">C#</MudChip>
                     <MudChip Color="Color.Success">MudBlazor</MudChip>
@@ -111,9 +112,8 @@
 
     List<Model.Article> _articles = new();
     private int _selectedIndex = -1;
-    int _dataSize = 4;
-    double[] _data = { 35, 25, 20, 5, 8, 10 };
-    string[] _labels = { "日记", "闲言碎语", "DotNet", "JavaScript", "Python", "算法和数据结构" };
+    readonly double[] _data = { 35, 25, 20, 5, 8, 10 };
+    readonly string[] _labels = { "日记", "闲言碎语", "DotNet", "JavaScript", "Python", "算法和数据结构" };
 
     protected override void OnInitialized()
     {

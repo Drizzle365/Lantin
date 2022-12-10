@@ -1,11 +1,13 @@
 ﻿@page "/article/{Id:int}"
+@using Lantin.Model
 @inject IFreeSql Db
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IJSRuntime Js
 @inject WebSiteConfigService WebSiteConfig
 
-<PageTitle>@_article?.Title | @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
+<PageTitle>@_article?.Title – @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
+
 <MudContainer Style="margin-top:100px">
     <MudPaper Class="pa-8 pb-16">
         <MudText Typo="Typo.h3" Class="mb-5">@_article?.Title</MudText>
@@ -26,8 +28,8 @@
         <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
             本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
             转载请注明来自
-            <MudLink Href="/">
-                <MudChip Variant="Variant.Outlined" Color="Color.Secondary">Lantin</MudChip>
+            <MudLink Href="@(WebSiteConfig.GetValue("WebSiteUrl"))">
+                <MudChip Variant="Variant.Outlined" Color="Color.Secondary">@(WebSiteConfig.GetValue("WebSiteName"))</MudChip>
             </MudLink>
         </MudPaper>
         @if (_last is not null)
@@ -114,7 +116,7 @@
     string? _name;
     string? _url;
     string? _content;
-    List<Model.Comment> _comments = new();
+    List<Comment> _comments = new();
 
     protected override void OnInitialized()
     {
@@ -129,17 +131,15 @@
     void Load()
     {
         _article = Db.Select<Model.Article>().Where(x => x.ArticleId == Id).First();
-        _comments = Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToList();
+        _comments = Db.Select<Comment>().Where(x => x.ArticleId == Id).ToList();
         _last = Db.Select<Model.Article>()
-            .Where(x => x.ArticleId < Id).OrderBy("ArticleId DESC").Limit(1).First();
+            .Where(x => x.ArticleId < Id && x.Visibility != Visibility.Hide).OrderBy("ArticleId DESC").Limit(1).First();
         _next = Db.Select<Model.Article>()
-            .Where(x => x.ArticleId > Id).Limit(1).First();
-        StateHasChanged();
+            .Where(x => x.ArticleId > Id && x.Visibility != Visibility.Hide).Limit(1).First();
     }
 
     void GetLast()
     {
-        StateHasChanged();
         Id = _last!.ArticleId;
         NavigationManager.NavigateTo($"/article/{_last?.ArticleId}");
         Load();
@@ -147,7 +147,6 @@
 
     void GetNext()
     {
-        StateHasChanged();
         Id = _next!.ArticleId;
         NavigationManager.NavigateTo($"/article/{_next?.ArticleId}");
         Load();
@@ -161,8 +160,8 @@
             Snackbar.Add("请填写完整！");
             return;
         }
-        await Db.Insert<Model.Comment>()
-            .AppendData(new Model.Comment
+        await Db.Insert<Comment>()
+            .AppendData(new Comment
             {
                 ArticleId = Id,
                 Email = _email,
@@ -173,7 +172,7 @@
             })
             .ExecuteIdentityAsync();
         _content = null;
-        _comments = await Db.Select<Model.Comment>().Where(x => x.ArticleId == Id).ToListAsync();
+        _comments = await Db.Select<Comment>().Where(x => x.ArticleId == Id).ToListAsync();
         StateHasChanged();
         Snackbar.Add("回复成功~");
     }
