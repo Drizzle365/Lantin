@@ -2,7 +2,7 @@
 
 public class UserSession
 {
-    public String Name { get; set; }
-    public String Role { get; set; }
-    public String Email { get; set; }
+    public string? Name { get; init; }
+    public string? Role { get; init; }
+    public string? Email { get; init; }
 }

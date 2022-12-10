@@ -11,11 +11,11 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 
     public CustomAuthenticationStateProvider(ProtectedLocalStorage storage)
     {
-        this._storage = storage;
+        _storage = storage;
     }
 
 
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync() 
+    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         try
         {
@@ -46,17 +46,16 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     }
 
 
-    private ClaimsPrincipal CreateIdentityFromUser(UserSession? user)
+    private static ClaimsPrincipal CreateIdentityFromUser(UserSession? user)
     {
         if (user is null) return new ClaimsPrincipal();
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.Name),
-            new(ClaimTypes.Email,user.Email)
+            new(ClaimTypes.Name, user.Name!),
+            new(ClaimTypes.Email, user.Email!)
         };
-        claims.AddRange(user.Role.Split(",").Select(p => new Claim(ClaimTypes.Role, p)));
+        claims.AddRange(user.Role!.Split(",").Select(p => new Claim(ClaimTypes.Role, p)));
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims));
         return claimsPrincipal;
-
     }
 }

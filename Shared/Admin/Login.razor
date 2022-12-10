@@ -3,10 +3,10 @@
 @inject WebSiteConfigService WebSiteConfigService
 @inject IFreeSql Db
 @inject ISnackbar Snackbar
-@inject Services.CustomAuthenticationStateProvider CustomAuthenticationStateProvider 
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider 
 <MudStack Style="height:100vh" Row="false" AlignItems="AlignItems.Center" Justify="Justify.Center">
     <MudPaper Class="pa-10 rounded-xl" Elevation="0">
-        <MudText Typo="Typo.h5">@WebSiteConfigService.GetValue("WebSiteName") | 登录</MudText>
+        <MudText Typo="Typo.h5">@WebSiteConfigService.GetValue("WebSiteName") – 登录</MudText>
         <MudForm>
             <MudTextField @bind-Value="Email" Label="邮箱" Required="true" RequiredError="Email is required!"/>
             <MudTextField @bind-Value="PassWord" Label="密码" InputType="InputType.Password" Required="true" RequiredError="Password is required!"/>
@@ -15,8 +15,6 @@
                 <MudButton OnClick="TryLogin" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">登录</MudButton>
             </div>
         </MudForm>
-
-
     </MudPaper>
 </MudStack>
 

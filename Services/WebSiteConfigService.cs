@@ -1,8 +1,10 @@
-﻿namespace Lantin.Services;
+﻿
+namespace Lantin.Services;
 
 public class WebSiteConfigService
 {
-    private List<Model.Config> Data { get; set; }
+    private List<Model.Config> Data { get; set; } = new ();
+
     public void Init(IFreeSql db)
     {
         Data = db.Select<Model.Config>().ToList();
@@ -15,8 +17,7 @@ public class WebSiteConfigService
 
     public string GetValue(string key)
     {
-        return Data.Find(x => x.Key == key)!.Value;
+        var value = Data.Find(x => x.Key == key)!.Value;
+        return value ?? "";
     }
-    
-
 }

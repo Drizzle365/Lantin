@@ -1,13 +1,13 @@
 ﻿@using System.Security.Claims
 @inject WebSiteConfigService WebSiteConfigService
-<AuthorizeView Roles="admin">
+<AuthorizeView Roles="Admin">
     <Authorized>
         <MudToolBar>
             <MudButton Href="/">🏮Lantin</MudButton>
             <MudSpacer/>
             <MudIconButton Icon="@Icons.Material.Outlined.Notifications"/>
             <MudIconButton Href="/admin/setting" Icon="@Icons.Material.Outlined.Settings"/>
-            <MudAvatar Class="ml-5" Image="@(WebSiteConfigService.GetValue("Gravatar") + Utility.EncodeMd5(@context.User.FindFirst(ClaimTypes.Email).Value))"></MudAvatar>
+            <MudAvatar Class="ml-5" Image="@(WebSiteConfigService.GetValue("Gravatar") + Utility.EncodeMd5(@context.User.FindFirst(ClaimTypes.Email)!.Value))"></MudAvatar>
         </MudToolBar>
     </Authorized>
 </AuthorizeView>
