@@ -2,6 +2,7 @@
 using MudBlazor.Services;
 using MudBlazor;
 using Lantin.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 Func<IServiceProvider, IFreeSql> freeSqlFactory = _ =>
@@ -23,6 +24,9 @@ builder.Services.AddSingleton<IFreeSql>(freeSqlFactory);
 builder.Services.AddSingleton<WebSiteConfigService>(webSiteConfigFactory);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddAuthenticationCore();
+builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(option => option.GetRequiredService<CustomAuthenticationStateProvider>());
 builder.Services.AddMudServices(config =>
 {
     config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
@@ -59,7 +63,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseRouting();
 
 app.MapBlazorHub();

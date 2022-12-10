@@ -51,7 +51,7 @@
                 <MudCard Class="mb-5" Elevation="0">
                     <MudCardHeader>
                         <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Secondary" Image="@($"https://sdn.geekzu.org/avatar/{Utility.EncodeMd5(item.Email)}")"></MudAvatar>
+                            <MudAvatar Color="Color.Secondary" Image="@(WebSiteConfig.GetValue("Gravatar") + Utility.EncodeMd5(item.Email))"></MudAvatar>
                         </CardHeaderAvatar>
                         <CardHeaderContent>
                             @if (item.Url is null)

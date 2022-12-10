@@ -1,0 +1,47 @@
+﻿@using Lantin.Model
+@using Lantin.Model.Session
+@inject WebSiteConfigService WebSiteConfigService
+@inject IFreeSql Db
+@inject ISnackbar Snackbar
+@inject Services.CustomAuthenticationStateProvider CustomAuthenticationStateProvider 
+<MudStack Style="height:100vh" Row="false" AlignItems="AlignItems.Center" Justify="Justify.Center">
+    <MudPaper Class="pa-10 rounded-xl" Elevation="0">
+        <MudText Typo="Typo.h5">@WebSiteConfigService.GetValue("WebSiteName") | 登录</MudText>
+        <MudForm>
+            <MudTextField @bind-Value="Email" Label="邮箱" Required="true" RequiredError="Email is required!"/>
+            <MudTextField @bind-Value="PassWord" Label="密码" InputType="InputType.Password" Required="true" RequiredError="Password is required!"/>
+            <div class="mt-3 d-flex align-center justify-space-between">
+                <MudCheckBox T="bool" Label="记住我!"/>
+                <MudButton OnClick="TryLogin" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">登录</MudButton>
+            </div>
+        </MudForm>
+
+
+    </MudPaper>
+</MudStack>
+
+@code
+{
+    string? Email { get; set; }
+    string? PassWord { get; set; }
+
+    async Task TryLogin()
+    {
+        var res = await Db.Select<User>()
+            .Where(x => x.Email == Email && x.PassWord == Utility.EncodeMd5(PassWord))
+            .FirstAsync();
+        if (res is null)
+        {
+            Snackbar.Add("登录失败");
+            return;
+        }
+        var temp = new UserSession
+        {
+            Name = res.UserName,
+            Role = res.Role,
+            Email = res.Email
+        };
+        CustomAuthenticationStateProvider.Login(temp);
+        Snackbar.Add($"登录成功,欢迎回来{res.UserName}");
+    }
+}

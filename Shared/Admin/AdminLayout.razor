@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager
 
 <MudThemeProvider/>
 <MudDialogProvider/>
@@ -10,19 +9,26 @@
     }
 </style>
 <MudLayout Style="background-color:rgb(240,243,250);min-height:100vh">
-    <MudPaper Elevation="0">
-        <MudDrawer Height="100vh" Elevation="0" Variant="@DrawerVariant.Mini">
-            <AdminNavMenu></AdminNavMenu>
-        </MudDrawer>
-    </MudPaper>
-    <MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px">
-        <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
-            <ToolBar/>
-        </MudPaper>
-    </MudPaper>
-    <MudPaper Elevation="0" Style="background-color:rgb(240,243,250);padding-left:80px;padding-right:30px">
-        <MudContainer>
-            @Body
-        </MudContainer>
-    </MudPaper>
+    <AuthorizeView Roles="admin">
+        <Authorized>
+            <MudPaper Elevation="0">
+                <MudDrawer Height="100vh" Elevation="0" Variant="@DrawerVariant.Mini">
+                    <AdminNavMenu></AdminNavMenu>
+                </MudDrawer>
+            </MudPaper>
+            <MudPaper Elevation="0" Style="padding-left:80px;padding-right:30px;background-color:aliceblue;margin-bottom:20px">
+                <MudPaper Elevation="0" Style="border-radius:0 0 20px 20px;">
+                    <ToolBar/>
+                </MudPaper>
+            </MudPaper>
+            <MudPaper Elevation="0" Style="background-color:rgb(240,243,250);padding-left:80px;padding-right:30px">
+                <MudContainer>
+                    @Body
+                </MudContainer>
+            </MudPaper>
+        </Authorized>
+        <NotAuthorized>
+            <Login/>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudLayout>

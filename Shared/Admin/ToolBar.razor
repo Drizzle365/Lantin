@@ -1,9 +1,17 @@
-﻿<MudToolBar>
-    <MudButton Href="/">🏮Lantin</MudButton>
-    <MudSpacer/>
-    <MudIconButton Icon="@Icons.Material.Outlined.Notifications"/>
-    <MudIconButton Href="/admin/setting" Icon="@Icons.Material.Outlined.Settings"/>
-</MudToolBar>
+﻿@using System.Security.Claims
+@inject WebSiteConfigService WebSiteConfigService
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <MudToolBar>
+            <MudButton Href="/">🏮Lantin</MudButton>
+            <MudSpacer/>
+            <MudIconButton Icon="@Icons.Material.Outlined.Notifications"/>
+            <MudIconButton Href="/admin/setting" Icon="@Icons.Material.Outlined.Settings"/>
+            <MudAvatar Class="ml-5" Image="@(WebSiteConfigService.GetValue("Gravatar") + Utility.EncodeMd5(@context.User.FindFirst(ClaimTypes.Email).Value))"></MudAvatar>
+        </MudToolBar>
+    </Authorized>
+</AuthorizeView>
+
 
 @code{
 
