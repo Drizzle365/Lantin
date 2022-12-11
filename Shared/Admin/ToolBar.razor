@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims
 @inject WebSiteConfigService WebSiteConfigService
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
 <AuthorizeView Roles="Admin">
     <Authorized>
         <MudToolBar>
@@ -7,12 +8,24 @@
             <MudSpacer/>
             <MudIconButton Icon="@Icons.Material.Outlined.Notifications"/>
             <MudIconButton Href="/admin/setting" Icon="@Icons.Material.Outlined.Settings"/>
-            <MudAvatar Class="ml-5" Image="@(WebSiteConfigService.GetValue("Gravatar") + Utility.EncodeMd5(@context.User.FindFirst(ClaimTypes.Email)!.Value))"></MudAvatar>
+            <MudMenu>
+                <ActivatorContent>
+                    <MudAvatar Class="ml-5" Image="@(WebSiteConfigService.GetValue("Gravatar") + Utility.EncodeMd5(@context.User.FindFirst(ClaimTypes.Email)!.Value))"></MudAvatar>
+                </ActivatorContent>
+                <ChildContent>
+                    <MudMenuItem OnClick="LogOut">退出</MudMenuItem>
+                </ChildContent>
+            </MudMenu>
         </MudToolBar>
     </Authorized>
 </AuthorizeView>
 
 
 @code{
+
+    void LogOut()
+    {
+        CustomAuthenticationStateProvider.LogOut();
+    }
 
 }
