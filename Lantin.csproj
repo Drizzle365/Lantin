@@ -14,6 +14,7 @@
     <PackageReference Include="FreeSql" Version="3.2.683" />
     <PackageReference Include="FreeSql.Provider.MySqlConnector" Version="3.2.683" />
     <PackageReference Include="MudBlazor" Version="6.1.2" />
+    <PackageReference Include="MudBlazor.Markdown" Version="0.0.12" />
   </ItemGroup>
 
 </Project>

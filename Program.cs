@@ -39,7 +39,7 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.ShowTransitionDuration = 100;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
-
+builder.Services.AddMudMarkdownServices();
 var app = builder.Build();
 
 using (IServiceScope serviceScope = app.Services.CreateScope())
