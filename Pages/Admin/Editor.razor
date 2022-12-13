@@ -26,31 +26,22 @@
         <MudChip Color="Color.Warning">私密</MudChip>
     </MudChipSet>
 </MudPaper>
-<MudPaper Elevation="3" Class="pa-3 rounded-0">
-    <div id="editor"></div>
+<MudPaper Elevation="3" Class="rounded-0" Style="position: relative;height: 400px">
+    <textarea @bind="content" id="editor">
+
+    </textarea>
 </MudPaper>
+<br/><br/>
 
 @code {
     string? _title;
     MudChip? _selected;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Js.InvokeVoidAsync("InitEditor");
-        }
-    }
-
-    async Task<string> GetEditorData()
-    {
-        return await Js.InvokeAsync<string>("GetEditorData");
-    }
+    string? content;
 
     async Task Post()
     {
-        var content = await GetEditorData();
-        if (_title == null)
+        if (_title is null || content is null)
         {
             Snackbar.Add("请输入标题和内容再发布");
             return;
@@ -64,6 +55,7 @@
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");
     }
+
     void OpenImageEditor()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
@@ -75,4 +67,5 @@
         var options = new DialogOptions { CloseOnEscapeKey = true };
         DialogService.Show<Shared.Dialog.MusicEditor>("插入音乐", options);
     }
+
 }

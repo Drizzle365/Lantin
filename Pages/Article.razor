@@ -22,7 +22,9 @@
         <br/><br/>
         <MudText Typo="Typo.body1" Class="pb-8">
             <div class="markdown-body">
-                @(new MarkupString(_article?.Content!))
+                <MudMarkdown Value="@_article?.Content" >
+                    
+                </MudMarkdown>
             </div>
         </MudText>
         <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
@@ -126,6 +128,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await Js.InvokeVoidAsync("InitHighlight");
+        await Js.InvokeVoidAsync("InitFancyBox");
     }
 
     void Load()
