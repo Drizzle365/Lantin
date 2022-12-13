@@ -17,4 +17,8 @@
     <PackageReference Include="MudBlazor.Markdown" Version="0.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\upload" />
+  </ItemGroup>
+
 </Project>

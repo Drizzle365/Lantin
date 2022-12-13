@@ -26,7 +26,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(option => option.GetRequiredService<CustomAuthenticationStateProvider>());
+builder.Services.AddScoped<AuthenticationStateProvider>(option =>
+    option.GetRequiredService<CustomAuthenticationStateProvider>());
 builder.Services.AddMudServices(config =>
 {
     config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
@@ -50,6 +51,8 @@ using (IServiceScope serviceScope = app.Services.CreateScope())
     // freeSql.CodeFirst.SyncStructure(typeof(User));
     // freeSql.CodeFirst.SyncStructure(typeof(Categorize));
     // freeSql.CodeFirst.SyncStructure(typeof(Config));
+    freeSql.CodeFirst.SyncStructure(typeof(UpLoad));
+
     var webSiteConfig = serviceScope.ServiceProvider.GetRequiredService<WebSiteConfigService>();
     webSiteConfig.Init(freeSql);
 }

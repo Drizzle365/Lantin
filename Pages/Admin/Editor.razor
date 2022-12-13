@@ -1,9 +1,9 @@
 ﻿@page "/Admin/Editor"
-@inject IDialogService DialogService
 @inject ISnackbar Snackbar
-@inject IJSRuntime Js
 @inject IFreeSql Db
 @inject WebSiteConfigService WebSiteConfigService
+@inject IWebHostEnvironment Environment
+@using System.IO
 <PageTitle>文章发布 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
@@ -17,38 +17,126 @@
     </MudToolBar>
 </MudPaper>
 <MudPaper Elevation="0" Class="rounded-0 pa-3">
-    <MudIconButton Icon="@Icons.Filled.Image" OnClick="OpenImageEditor"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.VideoCameraBack"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="OpenMusicEditor"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.Code"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.Image" OnClick="() => { OpenDialog(InsertDialogClass.图片); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.VideoCameraBack" OnClick="() => { OpenDialog(InsertDialogClass.视频); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="() => { OpenDialog(InsertDialogClass.音乐); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.Code" OnClick="() => { OpenDialog(InsertDialogClass.代码); }"></MudIconButton>
     <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
         <MudChip Color="Color.Success" Default="true">公开</MudChip>
         <MudChip Color="Color.Warning">私密</MudChip>
     </MudChipSet>
 </MudPaper>
-<MudPaper Elevation="3" Class="rounded-0" Style="position: relative;height: 400px">
-    <textarea @bind="content" id="editor">
+<MudTabs Elevation="2" ApplyEffectsToContainer="true" Color="@Color.Dark">
+    <MudTabPanel Text="编辑" Icon="@Icons.Filled.EditNote">
+        <MudPaper Elevation="0" Class="rounded-0" Style="position: relative;height: 400px">
+            <textarea @bind="_content" id="editor"></textarea>
+        </MudPaper>
+    </MudTabPanel>
+    <MudTabPanel Text="预览" Icon="@Icons.Filled.RemoveRedEye">
+        <MudPaper Elevation="0" Class="rounded-0 pa-3" Style="position: relative;min-height: 400px">
+            <div class="markdown-body-light">
+                <MudMarkdown Value="@_content"></MudMarkdown>
+            </div>
+        </MudPaper>
+    </MudTabPanel>
+</MudTabs>
 
-    </textarea>
-</MudPaper>
 <br/><br/>
+<MudDialog @bind-IsVisible="_dialogVisible">
+    <TitleContent>
+        @switch (_insertDialogClass)
+        {
+            case InsertDialogClass.图片:
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入图片
+                </MudText>
+                break;
+
+            case InsertDialogClass.视频:
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入视频
+                </MudText>
+                break;
+            case InsertDialogClass.音乐:
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入音乐
+                </MudText>
+                break;
+            case InsertDialogClass.代码:
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入代码
+                </MudText>
+                break;
+        }
+    </TitleContent>
+    <DialogContent>
+        @switch (_insertDialogClass)
+        {
+            case InsertDialogClass.图片:
+                <MudPaper MinWidth="350px" Elevation="0">
+                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="image/png,image/gif,image/jpeg">
+                        <ButtonTemplate>
+                            <MudFab HtmlTag="label"
+                                    Color="Color.Primary"
+                                    Icon="@Icons.Filled.Image"
+                                    Label="上传 & 拍摄"
+                                    for="@context"/>
+                        </ButtonTemplate>
+                    </MudFileUpload><br/>
+                    <MudStack Row="true">
+                        <MudTextField @bind-Value="_imageUrl" Label="输入图片外链"></MudTextField>
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => { InsertImage(); }">获取</MudButton>
+                    </MudStack><br/><br/>
+                    @if (_files.Count > 0)
+                    {
+                        <MudText Typo="@Typo.h6">已上传 @_files.Count() 个图片@(_files.Count() == 1 ? "" : "s"):</MudText>
+                        <MudList>
+                            @foreach (var file in _files)
+                            {
+                                <MudListItem Icon="@Icons.Filled.AttachFile" @key="@file">
+                                    <span style="padding-right: 10px;line-height: 36px">@file["Name"]</span>
+                                    <MudButton Style="float: right" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => { InsertImage(file); }">
+                                        插入
+                                    </MudButton>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                </MudPaper>
+                break;
+        }
+    </DialogContent>
+
+</MudDialog>
 
 @code {
+
+    enum InsertDialogClass
+    {
+        图片,
+        视频,
+        音乐,
+        代码
+    }
+
+    InsertDialogClass _insertDialogClass;
     string? _title;
     MudChip? _selected;
-
-    string? content;
+    bool _dialogVisible;
+    string? _content;
+    string? _imageUrl;
+    readonly List<Dictionary<string, string>> _files = new();
 
     async Task Post()
     {
-        if (_title is null || content is null)
+        if (_title is null || _content is null)
         {
             Snackbar.Add("请输入标题和内容再发布");
             return;
         }
         await Db.Insert(new Model.Article
         {
-            Content = content,
+            Content = _content,
             DateTime = DateTime.Now,
             Title = _title
         })
@@ -56,16 +144,47 @@
         Snackbar.Add("发布成功！");
     }
 
-    void OpenImageEditor()
+    void OpenDialog(InsertDialogClass p)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<Shared.Dialog.ImageEditor>("插入图片", options);
+        _insertDialogClass = p;
+        _dialogVisible = true;
     }
 
-    void OpenMusicEditor()
+    void InsertImage(Dictionary<string, string>? file = null)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<Shared.Dialog.MusicEditor>("插入音乐", options);
+        if (file is not null)
+        {
+            _imageUrl = file["Path"];
+        }
+        if (_imageUrl is null)
+        {
+            Snackbar.Add("请输入图片外链后获取!");
+            return;
+        }
+        _content += $"\n![]({_imageUrl})";
+        _imageUrl = null;
+        _dialogVisible = false;
+    }
+
+    private async void UploadFiles(IBrowserFile file)
+    {
+        var guid = Guid.NewGuid().ToString();
+        var path = Path.Combine(Environment.ContentRootPath, "wwwroot",
+            "upload", DateTime.Now.Year.ToString(),
+            DateTime.Now.Month.ToString());
+        Directory.CreateDirectory(path);
+        var www = Path.Combine("upload", DateTime.Now.Year.ToString(),
+            DateTime.Now.Month.ToString()) + guid + "." + file.Name.Split('.').Last();
+        Console.WriteLine(path + guid + "." + file.ContentType);
+        await using FileStream fs = new(path + guid + "." + file.Name.Split('.').Last(), FileMode.Create);
+        await file.OpenReadStream(10240000).CopyToAsync(fs);
+        _files.Add(new Dictionary<string, string>
+        {
+            { "Name", file.Name },
+            { "Guid", guid },
+            { "Path", www }
+        });
+        StateHasChanged();
     }
 
 }
