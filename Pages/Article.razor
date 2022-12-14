@@ -22,8 +22,8 @@
         <br/><br/>
         <MudText Typo="Typo.body1" Class="pb-8">
             <div class="markdown-body-dark">
-                <MudMarkdown Value="@_article?.Content" >
-                    
+                <MudMarkdown Value="@_article?.Content" CodeBlockTheme="CodeBlockTheme.AtomOneDarkReasonable">
+
                 </MudMarkdown>
             </div>
         </MudText>
@@ -127,7 +127,6 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Js.InvokeVoidAsync("InitHighlight");
         await Js.InvokeVoidAsync("InitFancyBox");
     }
 

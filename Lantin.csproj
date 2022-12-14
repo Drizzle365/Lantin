@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\markdowndark.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FreeSql" Version="3.2.685-beta20221206" />
     <PackageReference Include="FreeSql.Provider.MySqlConnector" Version="3.2.685-beta20221206" />
     <PackageReference Include="MudBlazor" Version="6.1.5" />
@@ -19,6 +15,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\upload" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\code\atom-one-dark.min.css" />
   </ItemGroup>
 
 </Project>

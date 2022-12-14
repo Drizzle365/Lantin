@@ -4,6 +4,8 @@
 @inject WebSiteConfigService WebSiteConfigService
 @inject IWebHostEnvironment Environment
 @using System.IO
+@using Lantin.Model
+@using Lantin.Model.Enum
 <PageTitle>文章发布 | @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
 
 <MudPaper Elevation="0" Style="border-radius:20px 20px 0 0">
@@ -104,27 +106,31 @@
                     }
                 </MudPaper>
                 break;
+            case InsertDialogClass.代码:
+                <MudPaper MinWidth="350px" Elevation="0">
+                    <MudSelect @bind-Value="_codeClass">
+                        @foreach (CodeClass item in Enum.GetValues(typeof(CodeClass)))
+                        {
+                            <MudSelectItem Value="@(item)"></MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudTextField @bind-Value="@_code" Label="Outlined" Variant="Variant.Outlined" Lines="8"/>
+                    <MudButton OnClick="() => { InsertCode(_codeClass); }" Class="mt-5" Variant="Variant.Filled" Color="Color.Primary">插入</MudButton>
+                </MudPaper>
+                break;
         }
     </DialogContent>
-
 </MudDialog>
 
 @code {
-
-    enum InsertDialogClass
-    {
-        图片,
-        视频,
-        音乐,
-        代码
-    }
-
     InsertDialogClass _insertDialogClass;
     string? _title;
     MudChip? _selected;
     bool _dialogVisible;
     string? _content;
     string? _imageUrl;
+    string? _code;
+    CodeClass _codeClass;
     readonly List<Dictionary<string, string>> _files = new();
 
     async Task Post()
@@ -134,7 +140,7 @@
             Snackbar.Add("请输入标题和内容再发布");
             return;
         }
-        await Db.Insert(new Model.Article
+        await Db.Insert(new Article
         {
             Content = _content,
             DateTime = DateTime.Now,
@@ -166,6 +172,18 @@
         _dialogVisible = false;
     }
 
+    void InsertCode(CodeClass? codeClass)
+    {
+        if (_code is null || codeClass is null)
+        {
+            Snackbar.Add("请输入代码！");
+            return;
+        }
+        _content += $"\n```{codeClass.ToString()}\n{_code}\n```";
+        _code = null;
+        _dialogVisible = false;
+    }
+
     private async void UploadFiles(IBrowserFile file)
     {
         var guid = Guid.NewGuid().ToString();
@@ -174,9 +192,8 @@
             DateTime.Now.Month.ToString());
         Directory.CreateDirectory(path);
         var www = Path.Combine("upload", DateTime.Now.Year.ToString(),
-            DateTime.Now.Month.ToString()) + guid + "." + file.Name.Split('.').Last();
-        Console.WriteLine(path + guid + "." + file.ContentType);
-        await using FileStream fs = new(path + guid + "." + file.Name.Split('.').Last(), FileMode.Create);
+            DateTime.Now.Month.ToString()) + "\\" + guid + "." + file.Name.Split('.').Last();
+        await using FileStream fs = new(path + "\\" + guid + "." + file.Name.Split('.').Last(), FileMode.Create);
         await file.OpenReadStream(10240000).CopyToAsync(fs);
         _files.Add(new Dictionary<string, string>
         {
@@ -184,6 +201,14 @@
             { "Guid", guid },
             { "Path", www }
         });
+        await Db.Insert<UpLoad>().AppendData(new UpLoad
+        {
+            Guid = guid,
+            Name = file.Name,
+            Path = www,
+            DateTime = DateTime.Now
+        }).ExecuteAffrowsAsync();
+
         StateHasChanged();
     }
 
