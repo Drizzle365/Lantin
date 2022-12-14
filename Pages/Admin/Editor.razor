@@ -76,7 +76,7 @@
         {
             case InsertDialogClass.图片:
                 <MudPaper MinWidth="350px" Elevation="0">
-                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="image/png,image/gif,image/jpeg">
+                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="image/*">
                         <ButtonTemplate>
                             <MudFab HtmlTag="label"
                                     Color="Color.Primary"
@@ -91,13 +91,73 @@
                     </MudStack><br/><br/>
                     @if (_files.Count > 0)
                     {
-                        <MudText Typo="@Typo.h6">已上传 @_files.Count() 个图片@(_files.Count() == 1 ? "" : "s"):</MudText>
+                        <MudText Typo="@Typo.h6">已上传 @_files.Count() 个附件:</MudText>
                         <MudList>
                             @foreach (var file in _files)
                             {
                                 <MudListItem Icon="@Icons.Filled.AttachFile" @key="@file">
-                                    <span style="padding-right: 10px;line-height: 36px">@file["Name"]</span>
+                                    <span style="padding-right: 10px;line-height: 36px">@file.Name</span>
                                     <MudButton Style="float: right" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => { InsertImage(file); }">
+                                        插入
+                                    </MudButton>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                </MudPaper>
+                break;
+            case InsertDialogClass.视频:
+                <MudPaper MinWidth="350px" Elevation="0">
+                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="video/*">
+                        <ButtonTemplate>
+                            <MudFab HtmlTag="label"
+                                    Color="Color.Primary"
+                                    Icon="@Icons.Filled.Image"
+                                    Label="上传 & 拍摄"
+                                    for="@context"/>
+                        </ButtonTemplate>
+                    </MudFileUpload><br/>
+                    @if (_files.Count > 0)
+                    {
+                        <MudText Typo="@Typo.h6">已上传 @_files.Count() 个附件:</MudText>
+                        <MudList>
+                            @foreach (var file in _files)
+                            {
+                                <MudListItem Icon="@Icons.Filled.AttachFile" @key="@file">
+                                    <span style="padding-right: 10px;line-height: 36px">@file.Name</span>
+                                    <MudButton Style="float: right" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => { InsertVideo(file); }">
+                                        插入
+                                    </MudButton>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                </MudPaper>
+                break;
+            case InsertDialogClass.音乐:
+                <MudPaper MinWidth="350px" Elevation="0">
+                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="audio/*">
+                        <ButtonTemplate>
+                            <MudFab HtmlTag="label"
+                                    Color="Color.Primary"
+                                    Icon="@Icons.Filled.Image"
+                                    Label="上传"
+                                    for="@context"/>
+                        </ButtonTemplate>
+                    </MudFileUpload><br/>
+                    <MudStack Row="true">
+                        <MudTextField @bind-Value="_netEaseCloudMusicId" Label="输入网易云ID"></MudTextField>
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => { InsertAudio(); }">获取</MudButton>
+                    </MudStack><br/><br/>
+                    @if (_files.Count > 0)
+                    {
+                        <MudText Typo="@Typo.h6">已上传 @_files.Count() 个附件:</MudText>
+                        <MudList>
+                            @foreach (var file in _files)
+                            {
+                                <MudListItem Icon="@Icons.Filled.AttachFile" @key="@file">
+                                    <span style="padding-right: 10px;line-height: 36px">@file.Name</span>
+                                    <MudButton Style="float: right" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => { InsertAudio(file); }">
                                         插入
                                     </MudButton>
                                 </MudListItem>
@@ -131,7 +191,8 @@
     string? _imageUrl;
     string? _code;
     CodeClass _codeClass;
-    readonly List<Dictionary<string, string>> _files = new();
+    readonly List<UpLoad> _files = new();
+    string? _netEaseCloudMusicId;
 
     async Task Post()
     {
@@ -144,7 +205,8 @@
         {
             Content = _content,
             DateTime = DateTime.Now,
-            Title = _title
+            Title = _title,
+            FileId = string.Join(" ", _files.Select(item => item.Guid).ToList())
         })
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");
@@ -156,11 +218,11 @@
         _dialogVisible = true;
     }
 
-    void InsertImage(Dictionary<string, string>? file = null)
+    void InsertImage(UpLoad? file = null)
     {
         if (file is not null)
         {
-            _imageUrl = file["Path"];
+            _imageUrl = file.Path;
         }
         if (_imageUrl is null)
         {
@@ -170,6 +232,31 @@
         _content += $"\n![]({_imageUrl})";
         _imageUrl = null;
         _dialogVisible = false;
+    }
+
+    void InsertVideo(UpLoad file)
+    {
+        _content += $"\n<video src=\"{file.Path}\" controls=\"controls\" width=\"100%\"></video>";
+        _dialogVisible = false;
+    }
+
+    void InsertAudio(UpLoad? file = null)
+    {
+        if (file is null)
+        {
+            if (_netEaseCloudMusicId is null)
+            {
+                Snackbar.Add("请选择一个音乐再插入！");
+                return;
+            }
+            _content += $"\n<iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width=100% height=86 src=\"//music.163.com/outchain/player?type=2&id={_netEaseCloudMusicId}&auto=1&height=66\"></iframe>\n";
+            _dialogVisible = false;
+        }
+        else
+        {
+            _content += $"\n<audio controls><source src=\"{file.Path}\" type=\"audio/mpeg\"></audio>\n";
+            _dialogVisible = false;
+        }
     }
 
     void InsertCode(CodeClass? codeClass)
@@ -195,20 +282,15 @@
             DateTime.Now.Month.ToString()) + "\\" + guid + "." + file.Name.Split('.').Last();
         await using FileStream fs = new(path + "\\" + guid + "." + file.Name.Split('.').Last(), FileMode.Create);
         await file.OpenReadStream(10240000).CopyToAsync(fs);
-        _files.Add(new Dictionary<string, string>
-        {
-            { "Name", file.Name },
-            { "Guid", guid },
-            { "Path", www }
-        });
-        await Db.Insert<UpLoad>().AppendData(new UpLoad
+        var one = new UpLoad
         {
             Guid = guid,
             Name = file.Name,
             Path = www,
             DateTime = DateTime.Now
-        }).ExecuteAffrowsAsync();
-
+        };
+        await Db.Insert<UpLoad>().AppendData(one).ExecuteAffrowsAsync();
+        _files.Add(one);
         StateHasChanged();
     }
 

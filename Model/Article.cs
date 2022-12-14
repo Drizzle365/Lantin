@@ -19,7 +19,10 @@ public class Article
     public string? Title { get; set; }
     [Column(DbType = "longtext")]
     public string? Content { get; set; }
-    public DateTime DateTime { get; set; }
+    public DateTime DateTime { get; set; } = DateTime.Now;
+    [Column(StringLength = 3000)]
+    public string? FileId { get; set; }
     public Visibility Visibility { get; set; } = Visibility.Open;
     public string? Additional { get; set; }
+    
 }

@@ -51,7 +51,7 @@ using (IServiceScope serviceScope = app.Services.CreateScope())
     // freeSql.CodeFirst.SyncStructure(typeof(User));
     // freeSql.CodeFirst.SyncStructure(typeof(Categorize));
     // freeSql.CodeFirst.SyncStructure(typeof(Config));
-    freeSql.CodeFirst.SyncStructure(typeof(UpLoad));
+    // freeSql.CodeFirst.SyncStructure(typeof(UpLoad));
 
     var webSiteConfig = serviceScope.ServiceProvider.GetRequiredService<WebSiteConfigService>();
     webSiteConfig.Init(freeSql);
