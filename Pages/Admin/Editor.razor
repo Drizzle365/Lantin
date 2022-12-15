@@ -3,6 +3,7 @@
 @inject IFreeSql Db
 @inject WebSiteConfigService WebSiteConfigService
 @inject IWebHostEnvironment Environment
+@inject IJSRuntime Js
 @using System.IO
 @using Lantin.Model
 @using Lantin.Model.Enum
@@ -201,6 +202,10 @@
     readonly List<UpLoad> _files = new();
     string? _netEaseCloudMusicId;
     string? _password;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("EditorTab");
+    }
 
     async Task Post()
     {
