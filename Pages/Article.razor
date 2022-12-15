@@ -8,103 +8,118 @@
 
 <PageTitle>@_article?.Title – @WebSiteConfig.GetValue("WebSiteName")</PageTitle>
 
-<MudContainer Style="margin-top:100px">
-    <MudPaper Class="pa-8 pb-16">
-        <MudText Typo="Typo.h3" Class="mb-5">@_article?.Title</MudText>
-        <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
-        <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article?.Content).Length) 字</MudChip>
-        <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
-            @($"{_article!.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
-        </MudChip>
-        <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
-            @($"{_article!.DateTime.Hour}:{_article.DateTime.Minute}")
-        </MudChip>
-        <br/><br/>
-        <MudText Typo="Typo.body1" Class="pb-8">
-            <div class="markdown-body-dark">
-                <MudMarkdown Value="@_article?.Content" CodeBlockTheme="CodeBlockTheme.AtomOneDarkReasonable">
 
-                </MudMarkdown>
-            </div>
-        </MudText>
-        <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
-            本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
-            转载请注明来自
-            <MudLink Href="@(WebSiteConfig.GetValue("WebSiteUrl"))">
-                <MudChip Variant="Variant.Outlined" Color="Color.Secondary">@(WebSiteConfig.GetValue("WebSiteName"))</MudChip>
-            </MudLink>
-        </MudPaper>
-        @if (_last is not null)
-        {
-            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@_last?.Title</MudButton>
-        }
-        @if (_next is not null)
-        {
-            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right;" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
-        }
-    </MudPaper>
-    <br/>
-    <br/>
-    @if (_comments.Count > 0)
+<MudContainer Style="margin-top:100px">
+    @if (_article?.Visibility == Visibility.Cypher && _article.Additional != _password)
     {
-        <MudPaper Class="pa-4" Elevation="0">
-            @foreach (var item in _comments)
+        <MudTextField Label="请输入密码后回车！" @bind-Value="_password"></MudTextField>
+    }
+    else if (_article.Visibility == Visibility.Hide)
+    {
+        <MudText>404</MudText>
+    }
+    else
+    {
+        <MudPaper Class="pa-8 pb-16">
+            <MudText Typo="Typo.h3" Class="mb-5">@_article?.Title</MudText>
+            <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark">作者</MudChip>
+            <MudChip Icon="@Icons.Filled.Numbers" Color="Color.Dark">@(Utility.ReContent(_article?.Content).Length) 字</MudChip>
+            <MudChip Icon="@Icons.Filled.DateRange" Color="Color.Dark">
+                @($"{_article!.DateTime.Year}年{_article.DateTime.Month}月{_article.DateTime.Day}日")
+            </MudChip>
+            <MudChip Icon="@Icons.Filled.AccessTimeFilled" Color="Color.Dark">
+                @($"{_article!.DateTime.Hour}:{_article.DateTime.Minute}")
+            </MudChip>
+            <br/><br/>
+            <MudText Typo="Typo.body1" Class="pb-8">
+                <div class="markdown-body-dark">
+                    <MudMarkdown Value="@_article?.Content" CodeBlockTheme="CodeBlockTheme.AtomOneDarkReasonable">
+
+                    </MudMarkdown>
+                </div>
+            </MudText>
+            <MudPaper Class="mb-5 pa-5" Elevation="0" Style="background-color:#21695126;border-radius:20px;text-align: center">
+                本站所有文章除特别声明外，均采用 <MudChip Variant="Variant.Outlined" Color="Color.Secondary">CC BY-NC-SA 4.0</MudChip> 许可协议
+                转载请注明来自
+                <MudLink Href="@(WebSiteConfig.GetValue("WebSiteUrl"))">
+                    <MudChip Style="cursor: pointer" Variant="Variant.Outlined" Color="Color.Secondary">@(WebSiteConfig.GetValue("WebSiteName"))</MudChip>
+                </MudLink>
+            </MudPaper>
+            @if (_last is not null)
             {
-                <MudCard Class="mb-5" Elevation="0">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Secondary" Image="@(WebSiteConfig.GetValue("Gravatar") + Utility.EncodeMd5(item.Email))"></MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            @if (item.Url is null)
-                            {
-                                <MudText Typo="Typo.body1">@item.Name</MudText>
-                            }
-                            else
-                            {
-                                <NavLink Href="@item.Url" Target="_blank">
-                                    <MudText Typo="Typo.body1">@item.Name</MudText>
-                                </NavLink>
-                            }
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">@item.DateTime</MudText>
-                        </CardHeaderContent>
-                        <CardHeaderActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
-                        </CardHeaderActions>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            @item.Content
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
+                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:left" OnClick="GetLast">上一篇：@_last?.Title</MudButton>
+            }
+            @if (_next is not null)
+            {
+                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Style="float:right;" OnClick="GetNext">下一篇：@_next?.Title</MudButton>
             }
         </MudPaper>
         <br/>
         <br/>
-    }
+        @if (_comments.Count > 0)
+        {
+            <MudPaper Class="pa-4" Elevation="0">
+                @foreach (var item in _comments)
+                {
+                    <MudCard Class="mb-5" Elevation="0">
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudAvatar Color="Color.Secondary" Image="@(WebSiteConfig.GetValue("Gravatar") + Utility.EncodeMd5(item.Email))"></MudAvatar>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                @if (item.Url is null)
+                                {
+                                    <MudText Typo="Typo.body1">@item.Name</MudText>
+                                }
+                                else
+                                {
+                                    <NavLink Href="@item.Url" Target="_blank">
+                                        <MudText Typo="Typo.body1">@item.Name</MudText>
+                                    </NavLink>
+                                }
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@item.DateTime</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.Reply" Color="Color.Inherit"/>
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText Typo="Typo.body2">
+                                @item.Content
+                            </MudText>
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </MudPaper>
+            <br/>
+            <br/>
+        }
 
-    <MudPaper Class="pa-8">
-        <MudText Typo="Typo.h4">评论</MudText>
-        <MudGrid Class="pt-5">
-            <MudItem xs="12" lg="4" md="4">
-                <MudTextField @bind-Value="_email" Label="邮箱 *" Variant="Variant.Filled"/>
-            </MudItem>
-            <MudItem xs="12" lg="4" md="4">
-                <MudTextField @bind-Value="_name" Label="昵称 *" Variant="Variant.Filled"/>
-            </MudItem>
-            <MudItem xs="12" lg="4" md="4">
-                <MudTextField @bind-Value="_url" Label="网址" Variant="Variant.Filled"/>
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Placeholder="在这里输入您的评论内容 *" @bind-Value="_content" Variant="Variant.Filled" Lines="5"/>
-            </MudItem>
-            <MudItem xs="5">
-                <MudButton OnClick="PostComment" Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
-            </MudItem>
-        </MudGrid>
-    </MudPaper><br/><br/>
+        <MudPaper Class="pa-8">
+            <MudText Typo="Typo.h4">评论</MudText>
+            <MudGrid Class="pt-5">
+                <MudItem xs="12" lg="4" md="4">
+                    <MudTextField @bind-Value="_email" Label="邮箱 *" Variant="Variant.Filled"/>
+                </MudItem>
+                <MudItem xs="12" lg="4" md="4">
+                    <MudTextField @bind-Value="_name" Label="昵称 *" Variant="Variant.Filled"/>
+                </MudItem>
+                <MudItem xs="12" lg="4" md="4">
+                    <MudTextField @bind-Value="_url" Label="网址" Variant="Variant.Filled"/>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Placeholder="在这里输入您的评论内容 *" @bind-Value="_content" Variant="Variant.Filled" Lines="5"/>
+                </MudItem>
+                <MudItem xs="5">
+                    <MudButton OnClick="PostComment" Variant="Variant.Filled" Color="Color.Secondary">发送</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+        <br/>
+        <br/>
+    }
 </MudContainer>
+
 
 @code {
 
@@ -118,6 +133,7 @@
     string? _name;
     string? _url;
     string? _content;
+    string? _password;
     List<Comment> _comments = new();
 
     protected override void OnInitialized()

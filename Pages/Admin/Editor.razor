@@ -24,9 +24,16 @@
     <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="() => { OpenDialog(InsertDialogClass.音乐); }"></MudIconButton>
     <MudIconButton Icon="@Icons.Filled.Code" OnClick="() => { OpenDialog(InsertDialogClass.代码); }"></MudIconButton>
     <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
-        <MudChip Color="Color.Success" Default="true">公开</MudChip>
-        <MudChip Color="Color.Warning">私密</MudChip>
+        <MudChip Text="公开" Color="Color.Success" Default="true">公开</MudChip>
+        <MudChip Text="私密" Color="Color.Warning">私密</MudChip>
+        <MudChip Text="密码" Color="Color.Error">密码</MudChip>
     </MudChipSet>
+    @if (_selected?.Text == "密码")
+    {
+        <div style="display: inline-block;width: 200px;">
+            <MudTextField @bind-Value="_password" Variant="Variant.Filled" Label="输入密码"></MudTextField>
+        </div>
+    }
 </MudPaper>
 <MudTabs Elevation="2" ApplyEffectsToContainer="true" Color="@Color.Dark">
     <MudTabPanel Text="编辑" Icon="@Icons.Filled.EditNote">
@@ -193,6 +200,7 @@
     CodeClass _codeClass;
     readonly List<UpLoad> _files = new();
     string? _netEaseCloudMusicId;
+    string? _password;
 
     async Task Post()
     {
@@ -201,12 +209,24 @@
             Snackbar.Add("请输入标题和内容再发布");
             return;
         }
+        var vis = Visibility.Open;
+
+        if (_selected?.Text == "私密")
+        {
+            vis = Visibility.Hide;
+        }
+        else if (_selected?.Text == "密码")
+        {
+            vis = Visibility.Cypher;
+        }
         await Db.Insert(new Article
         {
             Content = _content,
             DateTime = DateTime.Now,
             Title = _title,
-            FileId = string.Join(" ", _files.Select(item => item.Guid).ToList())
+            FileId = string.Join(" ", _files.Select(item => item.Guid).ToList()),
+            Visibility = vis,
+            Additional = _password
         })
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");

@@ -1,4 +1,5 @@
 ﻿@page "/{page:int?}"
+@using Lantin.Model
 @inject IFreeSql Db
 @inject NavigationManager NavigationManager
 @inject WebSiteConfigService WebSiteConfig
@@ -39,7 +40,14 @@
                                 </MudLink><br/>
                                 <MudText Typo="Typo.body2">
                                     <div class="article-content">
-                                        @Utility.SubStr(Utility.ReContent(item.Content), 200)
+                                        @if (item.Visibility == Visibility.Open)
+                                        {
+                                            @Utility.SubStr(Utility.ReContent(item.Content), 200)
+                                        }
+                                        else
+                                        {
+                                            <div>无法提供摘要。这是一篇受保护的文章。</div>
+                                        }
                                     </div>
                                 </MudText>
                             </MudCardContent>

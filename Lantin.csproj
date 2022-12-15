@@ -17,4 +17,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\code\atom-one-dark.min.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\upload" />
+  </ItemGroup>
+
 </Project>
