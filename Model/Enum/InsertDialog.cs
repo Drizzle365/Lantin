@@ -1,6 +1,6 @@
 ﻿namespace Lantin.Model.Enum;
 
-public enum InsertDialogClass
+public enum InsertDialogEnum
 {
     图片,
     视频,

@@ -14,7 +14,7 @@
     {
         <MudTextField Label="请输入密码后回车！" @bind-Value="_password"></MudTextField>
     }
-    else if (_article.Visibility == Visibility.Hide)
+    else if (_article!.Visibility == Visibility.Hide)
     {
         <MudText>404</MudText>
     }

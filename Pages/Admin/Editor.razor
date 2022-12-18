@@ -20,59 +20,112 @@
     </MudToolBar>
 </MudPaper>
 <MudPaper Elevation="0" Class="rounded-0 pa-3">
-    <MudIconButton Icon="@Icons.Filled.Image" OnClick="() => { OpenDialog(InsertDialogClass.图片); }"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.VideoCameraBack" OnClick="() => { OpenDialog(InsertDialogClass.视频); }"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="() => { OpenDialog(InsertDialogClass.音乐); }"></MudIconButton>
-    <MudIconButton Icon="@Icons.Filled.Code" OnClick="() => { OpenDialog(InsertDialogClass.代码); }"></MudIconButton>
-    <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
-        <MudChip Text="公开" Color="Color.Success" Default="true">公开</MudChip>
-        <MudChip Text="私密" Color="Color.Warning">私密</MudChip>
-        <MudChip Text="密码" Color="Color.Error">密码</MudChip>
-    </MudChipSet>
-    @if (_selected?.Text == "密码")
-    {
-        <div style="display: inline-block;width: 200px;">
-            <MudTextField @bind-Value="_password" Variant="Variant.Filled" Label="输入密码"></MudTextField>
-        </div>
-    }
-</MudPaper>
-<MudTabs Elevation="2" ApplyEffectsToContainer="true" Color="@Color.Dark">
-    <MudTabPanel Text="编辑" Icon="@Icons.Filled.EditNote">
-        <MudPaper Elevation="0" Class="rounded-0" Style="position: relative;height: 400px">
-            <textarea @bind="_content" id="editor"></textarea>
-        </MudPaper>
-    </MudTabPanel>
-    <MudTabPanel Text="预览" Icon="@Icons.Filled.RemoveRedEye">
-        <MudPaper Elevation="0" Class="rounded-0 pa-3" Style="position: relative;min-height: 400px">
-            <div class="markdown-body-light">
-                <MudMarkdown Value="@_content"></MudMarkdown>
-            </div>
-        </MudPaper>
-    </MudTabPanel>
-</MudTabs>
+    <MudIconButton Icon="@Icons.Filled.Image" OnClick="() => { OpenDialog(InsertDialogEnum.图片); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.VideoCameraBack" OnClick="() => { OpenDialog(InsertDialogEnum.视频); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.LibraryMusic" OnClick="() => { OpenDialog(InsertDialogEnum.音乐); }"></MudIconButton>
+    <MudIconButton Icon="@Icons.Filled.Code" OnClick="() => { OpenDialog(InsertDialogEnum.代码); }"></MudIconButton>
 
+</MudPaper>
+<MudGrid Spacing="0">
+    <MudItem lg="9" md="8" sm="7" xl="6" xs="12">
+        <MudTabs Elevation="0" ApplyEffectsToContainer="true" Color="@Color.Dark">
+            <MudTabPanel Text="编辑" Icon="@Icons.Filled.EditNote">
+                <MudPaper Elevation="0" Class="rounded-0" Style="position: relative;height: 400px">
+                    <textarea @bind="_content" id="editor"></textarea>
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Text="预览" Icon="@Icons.Filled.RemoveRedEye">
+                <MudPaper Elevation="0" Class="rounded-0 pa-3" Style="position: relative;min-height: 400px">
+                    <div class="markdown-body-light">
+                        <MudMarkdown Value="@_content"></MudMarkdown>
+                    </div>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </MudItem>
+    <MudItem lg="3" md="4" sm="5" xl="6" xs="12">
+        <MudPaper Elevation="0" Style="text-align: center">
+            <div style="height: 48px;width:100%;background-color: black;padding-top: 4px">
+                <MudChip Label="true" Color="Color.Dark">文章设置</MudChip>
+            </div>
+            <MudExpansionPanels MultiExpansion="true" Elevation="0" DisableBorders="true">
+                <MudExpansionPanel>
+                    <TitleContent>
+                        <MudChip Label="true" Style="width: 80%" Color="Color.Error">隐私权限</MudChip>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
+                            <MudChip Text="公开" Color="Color.Success" Default="true">公开</MudChip>
+                            <MudChip Text="私密" Color="Color.Warning">私密</MudChip>
+                            <MudChip Text="密码" Color="Color.Error">密码</MudChip>
+                        </MudChipSet>
+                        @if (_selected?.Text == "密码")
+                        {
+                            <MudTextField Class="ma-3" @bind-Value="_password" Margin="Margin.Dense" Variant="Variant.Filled" Label="输入密码"></MudTextField>
+                        }
+                    </ChildContent>
+                </MudExpansionPanel>
+                <MudExpansionPanel>
+                    <TitleContent>
+                        <MudChip Label="true" Style="width: 80%" Color="Color.Success">分类目录</MudChip>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudChipSet Filter="true">
+                                                <MudChip Value="0" Color="Color.Dark" Default="true">未分类</MudChip>
+                                                <MudChip Color="Color.Dark">数据结构</MudChip>
+                                                <MudChip Color="Color.Dark">C#</MudChip>
+                                            </MudChipSet>
+                    </ChildContent>
+                </MudExpansionPanel>
+                <MudExpansionPanel>
+                     <TitleContent>
+                                            <MudChip Label="true" Style="width: 80%" Color="Color.Primary">标签</MudChip>
+                                        </TitleContent>
+                    <ChildContent>
+                        <MudChipSet AllClosable="true" OnClose="ClosedTag">
+                                                @foreach (var value in values)
+                                                {
+                                                    <MudChip Text="@value"></MudChip>
+                                                }
+                                            </MudChipSet>
+                                            <MudTextField @bind-Value="addTag"></MudTextField>
+                                            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="AddTag"></MudIconButton>
+
+                    </ChildContent>
+                    @code
+                    {
+                        string? addTag;
+                        List<string> values = new ();
+                         void AddTag() => values.Add(addTag ?? "");
+                         void ClosedTag(MudChip chip) => values.Remove(chip.Text);
+                    }
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 <br/><br/>
 <MudDialog @bind-IsVisible="_dialogVisible">
     <TitleContent>
-        @switch (_insertDialogClass)
+        @switch (_insertDialogEnum)
         {
-            case InsertDialogClass.图片:
+            case InsertDialogEnum.图片:
                 <MudText Typo="Typo.h6">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入图片
                 </MudText>
                 break;
 
-            case InsertDialogClass.视频:
+            case InsertDialogEnum.视频:
                 <MudText Typo="Typo.h6">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入视频
                 </MudText>
                 break;
-            case InsertDialogClass.音乐:
+            case InsertDialogEnum.音乐:
                 <MudText Typo="Typo.h6">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入音乐
                 </MudText>
                 break;
-            case InsertDialogClass.代码:
+            case InsertDialogEnum.代码:
                 <MudText Typo="Typo.h6">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> 插入代码
                 </MudText>
@@ -80,9 +133,9 @@
         }
     </TitleContent>
     <DialogContent>
-        @switch (_insertDialogClass)
+        @switch (_insertDialogEnum)
         {
-            case InsertDialogClass.图片:
+            case InsertDialogEnum.图片:
                 <MudPaper MinWidth="350px" Elevation="0">
                     <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="image/*">
                         <ButtonTemplate>
@@ -114,7 +167,7 @@
                     }
                 </MudPaper>
                 break;
-            case InsertDialogClass.视频:
+            case InsertDialogEnum.视频:
                 <MudPaper MinWidth="350px" Elevation="0">
                     <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="video/*">
                         <ButtonTemplate>
@@ -142,7 +195,7 @@
                     }
                 </MudPaper>
                 break;
-            case InsertDialogClass.音乐:
+            case InsertDialogEnum.音乐:
                 <MudPaper MinWidth="350px" Elevation="0">
                     <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="audio/*">
                         <ButtonTemplate>
@@ -174,16 +227,16 @@
                     }
                 </MudPaper>
                 break;
-            case InsertDialogClass.代码:
+            case InsertDialogEnum.代码:
                 <MudPaper MinWidth="350px" Elevation="0">
-                    <MudSelect @bind-Value="_codeClass">
-                        @foreach (CodeClass item in Enum.GetValues(typeof(CodeClass)))
+                    <MudSelect @bind-Value="_codeEnum">
+                        @foreach (CodeEnum item in Enum.GetValues(typeof(CodeEnum)))
                         {
                             <MudSelectItem Value="@(item)"></MudSelectItem>
                         }
                     </MudSelect>
                     <MudTextField @bind-Value="@_code" Label="Outlined" Variant="Variant.Outlined" Lines="8"/>
-                    <MudButton OnClick="() => { InsertCode(_codeClass); }" Class="mt-5" Variant="Variant.Filled" Color="Color.Primary">插入</MudButton>
+                    <MudButton OnClick="() => { InsertCode(_codeEnum); }" Class="mt-5" Variant="Variant.Filled" Color="Color.Primary">插入</MudButton>
                 </MudPaper>
                 break;
         }
@@ -191,17 +244,18 @@
 </MudDialog>
 
 @code {
-    InsertDialogClass _insertDialogClass;
+    InsertDialogEnum _insertDialogEnum;
     string? _title;
     MudChip? _selected;
     bool _dialogVisible;
     string? _content;
     string? _imageUrl;
     string? _code;
-    CodeClass _codeClass;
+    CodeEnum _codeEnum;
     readonly List<UpLoad> _files = new();
     string? _netEaseCloudMusicId;
     string? _password;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await Js.InvokeVoidAsync("EditorTab");
@@ -237,9 +291,9 @@
         Snackbar.Add("发布成功！");
     }
 
-    void OpenDialog(InsertDialogClass p)
+    void OpenDialog(InsertDialogEnum p)
     {
-        _insertDialogClass = p;
+        _insertDialogEnum = p;
         _dialogVisible = true;
     }
 
@@ -284,7 +338,7 @@
         }
     }
 
-    void InsertCode(CodeClass? codeClass)
+    void InsertCode(CodeEnum? codeClass)
     {
         if (_code is null || codeClass is null)
         {

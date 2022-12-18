@@ -67,8 +67,10 @@
                 }
             </MudGrid>
             <div style="text-align:center">
-                <MudPagination Color="Color.Secondary" SelectedChanged="PageChanged" Variant="Variant.Text" Count="@((int)(_articleCount / 8))"/>
-
+                @if ((_articleCount / 8) > 1)
+                {
+                    <MudPagination Color="Color.Secondary" SelectedChanged="PageChanged" Variant="Variant.Text" Count="@((int)(_articleCount / 8))"/>
+                }
             </div>
         </MudItem>
         <MudItem lg="4" md="4" sm="6" xs="12">

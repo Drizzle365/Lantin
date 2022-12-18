@@ -1,6 +1,6 @@
 ﻿namespace Lantin.Model.Enum;
 
-public enum CodeClass
+public enum CodeEnum
 {
     CSharp,
     Cpp,
