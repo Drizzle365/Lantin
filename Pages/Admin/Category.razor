@@ -1,8 +1,86 @@
 ﻿@page "/admin/category"
+@using Lantin.Model
 @inject WebSiteConfigService WebSiteConfigService
+@inject IFreeSql Db
+@inject ISnackbar Snackbar
 <PageTitle>文章分类 – @WebSiteConfigService.GetValue("WebSiteName")</PageTitle>
-<h3>Category</h3>
+
+<MudPaper Class="pa-3">
+    <MudGrid>
+        <MudItem lg="4" md="5" sm="6" xl="12">
+
+            @if (_selectedCategorizes is null)
+            {
+                <MudText >添加新分类目录</MudText>
+            }
+            else
+            {
+                <MudText>更新分类: @_selectedCategorizes.Text</MudText>
+            }
+            <MudTextField HelperText="名称是它在您网站上的显示方式。" @bind-Value="_categoryName" Label="名称" Variant="Variant.Filled" Margin="Margin.Dense"></MudTextField>
+            <MudTextField HelperText="别名是名称的 URL 友好版本。它通常都是小写的，并且只包含字母、数字和连字符。。" @bind-Value="_categoryAlias" Label="别名" Variant="Variant.Filled" Margin="Margin.Dense"></MudTextField>
+            <MudTextField HelperText="分类目录的描述。" @bind-Value="_categoryDescription" Label="描述" Variant="Variant.Filled" Margin="Margin.Dense"></MudTextField>
+            @if (_selectedCategorizes is null)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Post">添加</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Post">更新</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Del">删除</MudButton>
+            }
+
+
+        </MudItem>
+        <MudItem lg="8" md="7" sm="6" xl="12">
+            <MudText >分类目录</MudText>
+            <MudChipSet Filter="true" @bind-SelectedChip="_selectedCategorizes">
+                @foreach (var item in _categorizes)
+                {
+                    <MudChip Value="@item.CategorizeId" Color="Color.Dark" Default="true" Text="@item.Name"></MudChip>
+                }
+            </MudChipSet>
+
+            @code
+            {
+                MudChip? _selectedCategorizes;
+            }
+
+        </MudItem>
+    </MudGrid>
+</MudPaper>
 
 @code {
+    string? _categoryName;
+    string? _categoryAlias;
+    string? _categoryDescription;
+    List<Categorize> _categorizes = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categorizes = await Db.Select<Categorize>()
+            .ToListAsync();
+    }
+
+    async void Post()
+    {
+        await Db.Insert<Categorize>().AppendData(
+            new Categorize
+            {
+                Name = _categoryName,
+                Alias = _categoryAlias,
+                Description = _categoryDescription
+            }).ExecuteAffrowsAsync();
+        Snackbar.Add("添加分类成功！");
+    }
+
+    async void Del()
+    {
+        _categorizes.RemoveAt(_categorizes.FindIndex(x => x.CategorizeId == (int)_selectedCategorizes?.Value!));
+        await Db.Delete<Categorize>().Where(x => x.CategorizeId == (int)_selectedCategorizes!.Value).ExecuteAffrowsAsync();
+        Snackbar.Add($"分类 {_selectedCategorizes?.Text} 删除成功");
+    }
+
 
 }

@@ -44,63 +44,82 @@
         </MudTabs>
     </MudItem>
     <MudItem lg="3" md="4" sm="5" xl="6" xs="12">
-        <MudPaper Elevation="0" Style="text-align: center">
+        <MudPaper Elevation="0" Style="text-align: center;">
             <div style="height: 48px;width:100%;background-color: black;padding-top: 4px">
                 <MudChip Label="true" Color="Color.Dark">文章设置</MudChip>
             </div>
-            <MudExpansionPanels MultiExpansion="true" Elevation="0" DisableBorders="true">
-                <MudExpansionPanel>
-                    <TitleContent>
-                        <MudChip Label="true" Style="width: 80%" Color="Color.Error">隐私权限</MudChip>
-                    </TitleContent>
-                    <ChildContent>
-                        <MudChipSet @bind-SelectedChip="_selected" Filter="true" Style="display:inline-block">
-                            <MudChip Text="公开" Color="Color.Success" Default="true">公开</MudChip>
-                            <MudChip Text="私密" Color="Color.Warning">私密</MudChip>
-                            <MudChip Text="密码" Color="Color.Error">密码</MudChip>
-                        </MudChipSet>
-                        @if (_selected?.Text == "密码")
-                        {
-                            <MudTextField Class="ma-3" @bind-Value="_password" Margin="Margin.Dense" Variant="Variant.Filled" Label="输入密码"></MudTextField>
-                        }
-                    </ChildContent>
-                </MudExpansionPanel>
-                <MudExpansionPanel>
-                    <TitleContent>
-                        <MudChip Label="true" Style="width: 80%" Color="Color.Success">分类目录</MudChip>
-                    </TitleContent>
-                    <ChildContent>
-                        <MudChipSet Filter="true">
-                                                <MudChip Value="0" Color="Color.Dark" Default="true">未分类</MudChip>
-                                                <MudChip Color="Color.Dark">数据结构</MudChip>
-                                                <MudChip Color="Color.Dark">C#</MudChip>
-                                            </MudChipSet>
-                    </ChildContent>
-                </MudExpansionPanel>
-                <MudExpansionPanel>
-                     <TitleContent>
-                                            <MudChip Label="true" Style="width: 80%" Color="Color.Primary">标签</MudChip>
-                                        </TitleContent>
-                    <ChildContent>
-                        <MudChipSet AllClosable="true" OnClose="ClosedTag">
-                                                @foreach (var value in values)
-                                                {
-                                                    <MudChip Text="@value"></MudChip>
-                                                }
-                                            </MudChipSet>
-                                            <MudTextField @bind-Value="addTag"></MudTextField>
-                                            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="AddTag"></MudIconButton>
+            <div style="height: 400px;overflow:auto">
+                <MudExpansionPanels MultiExpansion="true" Elevation="0" DisableBorders="true">
+                    <MudExpansionPanel IsExpanded="true">
+                        <TitleContent>
+                            <MudChip Label="true" Style="width: 80%" Color="Color.Error">隐私权限</MudChip>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudChipSet @bind-SelectedChip="_selectedVis" Filter="true" Style="display:inline-block">
+                                <MudChip Text="公开" Color="Color.Success" Default="true">公开</MudChip>
+                                <MudChip Text="私密" Color="Color.Warning">私密</MudChip>
+                                <MudChip Text="密码" Color="Color.Error">密码</MudChip>
+                            </MudChipSet>
+                            @if (_selectedVis?.Text == "密码")
+                            {
+                                <MudTextField Class="ma-3" @bind-Value="_password" Margin="Margin.Dense" Variant="Variant.Filled" Label="输入密码"></MudTextField>
+                            }
+                        </ChildContent>
 
-                    </ChildContent>
-                    @code
-                    {
-                        string? addTag;
-                        List<string> values = new ();
-                         void AddTag() => values.Add(addTag ?? "");
-                         void ClosedTag(MudChip chip) => values.Remove(chip.Text);
-                    }
-                </MudExpansionPanel>
-            </MudExpansionPanels>
+                        @code
+                        {
+                            MudChip? _selectedVis;
+                        }
+
+                    </MudExpansionPanel>
+                    <MudExpansionPanel>
+                        <TitleContent>
+                            <MudChip Label="true" Style="width: 80%" Color="Color.Success">分类目录</MudChip>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudChipSet Filter="true" @bind-SelectedChip="_selectedCategorizes">
+                                @foreach (var item in _categorizes)
+                                {
+                                    <MudChip Value="@item.CategorizeId" Color="Color.Dark" Default="true">@item.Name</MudChip>
+                                }
+                            </MudChipSet>
+                        </ChildContent>
+
+                        @code
+                        {
+                            List<Categorize> _categorizes = new();
+                            MudChip? _selectedCategorizes;
+                        }
+
+                    </MudExpansionPanel>
+                    <MudExpansionPanel>
+                        <TitleContent>
+                            <MudChip Label="true" Style="width: 80%" Color="Color.Primary">标签</MudChip>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudChipSet AllClosable="true" OnClose="ClosedTag">
+                                @foreach (var value in _values)
+                                {
+                                    <MudChip Text="@value"></MudChip>
+                                }
+                            </MudChipSet>
+                            <MudStack Row="true">
+                                <MudTextField @bind-Value="_addTag"></MudTextField>
+                                <MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="AddTag"></MudIconButton>
+                            </MudStack>
+                        </ChildContent>
+
+                        @code
+                        {
+                            string? _addTag;
+                            readonly List<string> _values = new();
+                            void AddTag() => _values.Add(_addTag ?? "");
+                            void ClosedTag(MudChip chip) => _values.Remove(chip.Text);
+                        }
+
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </div>
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -246,7 +265,6 @@
 @code {
     InsertDialogEnum _insertDialogEnum;
     string? _title;
-    MudChip? _selected;
     bool _dialogVisible;
     string? _content;
     string? _imageUrl;
@@ -255,6 +273,11 @@
     readonly List<UpLoad> _files = new();
     string? _netEaseCloudMusicId;
     string? _password;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categorizes = await Db.Select<Categorize>().ToListAsync();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -270,11 +293,11 @@
         }
         var vis = Visibility.Open;
 
-        if (_selected?.Text == "私密")
+        if (_selectedVis?.Text == "私密")
         {
             vis = Visibility.Hide;
         }
-        else if (_selected?.Text == "密码")
+        else if (_selectedVis?.Text == "密码")
         {
             vis = Visibility.Cypher;
         }
@@ -285,7 +308,8 @@
             Title = _title,
             FileId = string.Join(" ", _files.Select(item => item.Guid).ToList()),
             Visibility = vis,
-            Additional = _password
+            Additional = _password,
+            CategorizeId = (int)(_selectedCategorizes?.Value ?? _categorizes.First().CategorizeId)
         })
             .ExecuteIdentityAsync();
         Snackbar.Add("发布成功！");
